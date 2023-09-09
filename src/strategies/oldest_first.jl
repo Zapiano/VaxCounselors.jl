@@ -7,7 +7,7 @@ function run_oldest_first(
 	V::Int64,
 )::Nothing
 	println("""
-		## Running Oldest First with parameters: 
+		## Running Oldest First with parameters:
 		  country = $country,
 		  utility = $utility,
 		  N = $N,
@@ -18,7 +18,7 @@ function run_oldest_first(
 	utility_A, utility_B = buildUtilities(country, utility)
 
 	#Run model
-	iteration = 0
+	iteration::Int64 = 0
 	unvaccinated_population::Int64 = N
 	while unvaccinated_population > 0
 		# Choose the oldest ones to be vaccinated

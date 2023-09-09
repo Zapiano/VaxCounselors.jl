@@ -167,7 +167,7 @@ function updateVaccinatedPopulation!(
 			label = utilityStep["label"]
 			labelIndex = findfirst(isequal(label), DEMOGRAPHICLABELS)
 
-			# update vaccinatedPopulation with current step 
+			# update vaccinatedPopulation with current step
 			rescaledPop = rescaledPopulation(utility, vaccinatedInStep)
 			utility.vaccinatedPopulation[end][labelIndex] += rescaledPop
 		end
