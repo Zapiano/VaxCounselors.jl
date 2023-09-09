@@ -6,54 +6,53 @@ using VaxCounselors: COUNTRIES, SETUPS, DEMOGRAPHICLABELS
 include("./smooth_steps.jl")
 
 export Utility,
-	buildUtilities,
-	updateUtility!,
-	updateVaccinatedPopulation!,
-	averageUtility,
-	integrateUtility
+	build_utilities,
+	update_utility!,
+	#_update_vaccinated_population!,
+	average_utility,
+	integrate_utility
 
 mutable struct Utility
 	steps::Vector{Dict}
 	benefits::Vector{Float64}
-	scaleFactor::Float64
-	normalizationFactor::Float64
-	# fraction of each age group vaccinated at each step
-	vaccinatedPopulation::Array{Array{Float64}}
+	scale_factor::Float64
+	normalization_factor::Float64
+	vaccinated_population::Array{Array{Float64}} # frac of each age group vaccinated per step
 end
 
 function labels(utility::Utility)::Array{AbstractString}
 	return [step["label"] for step in utility.steps]
 end
 
-function buildUtilities(countryIndex::String, utilityIndex::Int64)
-	stepsA::Vector{Dict} = buildUtilitySteps(countryIndex, utilityIndex, "A")
-	stepsB::Vector{Dict} = buildUtilitySteps(countryIndex, utilityIndex, "B")
+function build_utilities(country_index::String, utility_index::Int64)
+	steps_A::Vector{Dict} = _build_utility_steps(country_index, utility_index, "A")
+	steps_B::Vector{Dict} = _build_utility_steps(country_index, utility_index, "B")
 
-	utilityA = Utility(stepsA, [], 1, 1, [])
-	utilityB = Utility(stepsB, [], 1, 1, [])
+	utility_A = Utility(steps_A, [], 1, 1, [])
+	utility_B = Utility(steps_B, [], 1, 1, [])
 
-	updateNormalizationFactor!(utilityA)
-	updateNormalizationFactor!(utilityB)
+	_update_normalization_factor!(utility_A)
+	_update_normalization_factor!(utility_B)
 
-	return (utilityA, utilityB)
+	return (utility_A, utility_B)
 end
 
-function buildUtilitySteps(countryIndex::String, utilityIndex::Int64, counselor::String)
+function _build_utility_steps(country_index::String, utility_ondex::Int64, counselor::String)
 	steps::Vector{Dict} = []
 
-	intervals::Vector{Int64} = COUNTRIES[countryIndex]["demographic_intervals"]
+	intervals::Vector{Int64} = COUNTRIES[country_index]["demographic_intervals"]
 
-	intervalStart::Rational{Int64} = 0 // 100
-	intervalEnd::Rational{Int64} = 0 // 100
+	interval_start::Rational{Int64} = 0 // 100
+	interval_end::Rational{Int64} = 0 // 100
 	for i in eachindex(intervals)
-		intervalStart = intervalEnd
-		intervalEnd = intervalStart + intervals[i] // 100
+		interval_start = interval_end
+		interval_end = interval_start + intervals[i] // 100
 		range::Rational{Int64} = intervals[i] // 100
 
 		step = Dict(
-			"value" => SETUPS[utilityIndex]["values"][counselor][i],
+			"value" => SETUPS[utility_ondex]["values"][counselor][i],
 			"label" => DEMOGRAPHICLABELS[i],
-			"interval" => [intervalStart, intervalEnd],
+			"interval" => [interval_start, interval_end],
 			"range" => range::Rational{Int64},
 		)
 
@@ -63,21 +62,25 @@ function buildUtilitySteps(countryIndex::String, utilityIndex::Int64, counselor:
 	return steps
 end
 
-function updateNormalizationFactor!(utility::Utility)::Float64
-	intervalStart::Float64 = 0.0
-	intervalEnd::Float64 = 1.0
+function _update_normalization_factor!(utility::Utility)::Float64
+	interval_start::Float64 = 0.0
+	interval_end::Float64 = 1.0
 
 	# when using stepFunction:
 	#value = integrateStepFunction(utility.steps, intervalStart, intervalEnd)
 
 	# when using smoothFunction
-	value::Float64 = integrateSmoothStepFunction(utility.steps, intervalStart, intervalEnd)
+	value::Float64 = integrate_smooth_step_function(
+		utility.steps,
+		interval_start,
+		interval_end,
+	)
 	#value::Float64, err = quadgk(normalizedFunction(utility), 0.0, 1.0, rtol=1e-8)
 
-	utility.normalizationFactor = (1.0 / value)
+	utility.normalization_factor = (1.0 / value)
 end
 
-function integrateUtility(utility::Utility, intervals::Vector{Vector{Float64}})::Float64
+function integrate_utility(utility::Utility, intervals::Vector{Vector{Float64}})::Float64
 	result::Float64 = 0.0
 
 	#integrateFunction = normalizedFunction(utility)
@@ -86,151 +89,150 @@ function integrateUtility(utility::Utility, intervals::Vector{Vector{Float64}}):
 		#value::Float64 = integrateStepFunction(utility.steps, intervalStart, intervalEnd)
 
 		# when using smoothStepFunction
-		value = integrateSmoothStepFunction(utility.steps, interval[1], interval[2])
+		value = integrate_smooth_step_function(utility.steps, interval[1], interval[2])
 
 		result += value
 	end
 
-	return result * utility.normalizationFactor
+	return result * utility.normalization_factor
 end
 
-function averageUtility(stepsA::Vector{Dict},
-	stepsB::Vector{Dict})
-	normA::Float64 = sum([s["value"] * s["range"] for s in stepsA])
-	normB::Float64 = sum([s["value"] * s["range"] for s in stepsB])
+function average_utility(steps_A::Vector{Dict}, steps_B::Vector{Dict})::Utility
+	norm_A::Float64 = sum([s["value"] * s["range"] for s in steps_A])
+	norm_B::Float64 = sum([s["value"] * s["range"] for s in steps_B])
 
-	averageSteps::Vector{Dict} = []
+	average_steps::Vector{Dict} = []
 
-	for (stepA, stepB) in zip(stepsA, stepsB)
-		averageValue = (stepA["value"] / normA + stepB["value"] / normB) / 2
+	for (step_A, step_B) in zip(steps_A, steps_B)
+		average_value = (step_A["value"] / norm_A + step_B["value"] / norm_B) / 2
 
-		averageStep = Dict(
-			"value" => averageValue,
-			"label" => stepA["label"],
-			"interval" => copy(stepA["interval"]),
-			"range" => copy(stepA["range"]),
+		average_step = Dict(
+			"value" => average_value,
+			"label" => step_A["label"],
+			"interval" => copy(step_A["interval"]),
+			"range" => copy(step_A["range"]),
 		)
 
-		push!(averageSteps, averageStep)
+		push!(average_steps, average_step)
 	end
 
-	avgUtility = Utility(averageSteps, [], 1, 1, [])
+	avg_utility = Utility(average_steps, [], 1, 1, [])
 
-	updateNormalizationFactor!(avgUtility)
+	_update_normalization_factor!(avg_utility)
 
-	return avgUtility
+	return avg_utility
 end
 
 #*###################################
 #########* Update Utility ###########
 #*###################################
 
-function updateUtility!(utility::Utility, vaccinatedIntervals::Vector{Vector{Float64}})
+function update_utility!(utility::Utility, vaccinated_intervals::Vector{Vector{Float64}})
 	# Compute benefits of vaccinated population and update utility
-	updateBenefits!(utility, vaccinatedIntervals)
+	_update_benefits!(utility, vaccinated_intervals)
 
-	# Remove vaccinated population from steps and update vaccinatedPopulation
-	updateVaccinatedPopulation!(utility, vaccinatedIntervals)
+	# Remove vaccinated population from steps and update vaccinated_population
+	_update_vaccinated_population!(utility, vaccinated_intervals)
 
 	# Update scale factor
-	updateScaleFactor!(utility, vaccinatedIntervals)
+	_update_scale_factor!(utility, vaccinated_intervals)
 
 	# Remove empty steps and re-scale remaining ones
-	removeEmptySteps!(utility)
-	rescaleUtilitySteps!(utility, vaccinatedIntervals)
+	_remove_empty_steps!(utility)
+	_rescale_utility_steps!(utility, vaccinated_intervals)
 
 	# Integrate over whole utility to compute new normalization factor
-	updateNormalizationFactor!(utility)
+	_update_normalization_factor!(utility)
 end
 
-function updateBenefits!(
+function _update_benefits!(
 	utility::Utility,
-	vaccinatedIntervals::Vector{Vector{Float64}},
+	vaccinated_intervals::Vector{Vector{Float64}},
 )::Nothing
-	push!(utility.benefits, integrateUtility(utility, vaccinatedIntervals))
+	push!(utility.benefits, integrate_utility(utility, vaccinated_intervals))
 	return nothing
 end
 
-function updateVaccinatedPopulation!(
+function _update_vaccinated_population!(
 	utility::Utility,
-	vaccinatedIntervals::Vector{Vector{Float64}},
+	vaccinated_intervals::Vector{Vector{Float64}},
 )::Nothing
-	# Add new row to utility.vaccinatedPopulation to be updated later
-	push!(utility.vaccinatedPopulation, zeros(length(DEMOGRAPHICLABELS)))
+	# Add new row to utility.vaccinated_population to be updated later
+	push!(utility.vaccinated_population, zeros(length(DEMOGRAPHICLABELS)))
 
-	for interval in vaccinatedIntervals
-		for utilityStep in utility.steps
-			vaccinatedInStep::Rational = vaccinatedPopulation(utilityStep, interval)
-			utilityStep["range"] -= vaccinatedInStep
+	for interval in vaccinated_intervals
+		for utility_step in utility.steps
+			vaccinated_in_step::Rational = _vaccinated_population(utility_step, interval)
+			utility_step["range"] -= vaccinated_in_step
 
 			# Find index of current step (discounting the skipped steps)
-			label = utilityStep["label"]
-			labelIndex = findfirst(isequal(label), DEMOGRAPHICLABELS)
+			label = utility_step["label"]
+			label_index = findfirst(isequal(label), DEMOGRAPHICLABELS)
 
-			# update vaccinatedPopulation with current step
-			rescaledPop = rescaledPopulation(utility, vaccinatedInStep)
-			utility.vaccinatedPopulation[end][labelIndex] += rescaledPop
+			# update vaccinated_population with current step
+			rescaled_pop = _rescaled_population(utility, vaccinated_in_step)
+			utility.vaccinated_population[end][label_index] += rescaled_pop
 		end
 	end
 
 	return nothing
 end
 
-function vaccinatedPopulation(
-	utilityStep::Dict,
-	vaccinatedInterval::Vector{Float64},
+function _vaccinated_population(
+	utility_step::Dict,
+	vaccinated_interval::Vector{Float64},
 )::Float64
-	vaxIntervalStart, vaxIntervalEnd = vaccinatedInterval
-	stepIntervalStart, stepIntervalEnd = utilityStep["interval"]
+	vax_interval_start, vax_interval_end = vaccinated_interval
+	step_interval_start, step_interval_end = utility_step["interval"]
 
-	vaxIntervalStartsIn = stepIntervalStart <= vaxIntervalStart < stepIntervalEnd
-	vaxIntervalEndsIn = stepIntervalStart < vaxIntervalEnd <= stepIntervalEnd
-	vaxIntervalStartsBefore = vaxIntervalStart < stepIntervalStart
-	vaxIntervalEndsAfter = vaxIntervalEnd > stepIntervalEnd
+	vax_interval_starts_in = step_interval_start <= vax_interval_start < step_interval_end
+	vax_interval_ends_in = step_interval_start < vax_interval_end <= step_interval_end
+	vax_interval_starts_before = vax_interval_start < step_interval_start
+	vax_interval_ends_after = vax_interval_end > step_interval_end
 
-	if (vaxIntervalStartsIn && vaxIntervalEndsIn)
-		return (vaxIntervalEnd - vaxIntervalStart)
-	elseif (vaxIntervalStartsIn && vaxIntervalEndsAfter)
-		return (stepIntervalEnd - vaxIntervalStart)
-	elseif (vaxIntervalStartsBefore && vaxIntervalEndsIn)
-		return (vaxIntervalEnd - stepIntervalStart)
-	elseif (vaxIntervalStartsBefore && vaxIntervalEndsAfter)
-		return utilityStep["range"]
+	if (vax_interval_starts_in && vax_interval_ends_in)
+		return (vax_interval_end - vax_interval_start)
+	elseif (vax_interval_starts_in && vax_interval_ends_after)
+		return (step_interval_end - vax_interval_start)
+	elseif (vax_interval_starts_before && vax_interval_ends_in)
+		return (vax_interval_end - step_interval_start)
+	elseif (vax_interval_starts_before && vax_interval_ends_after)
+		return utility_step["range"]
 	else
 		return 0.0
 	end
 end
 
-function rescaledPopulation(utility::Utility, population::Rational)
-	return population / (utility.scaleFactor)
+function _rescaled_population(utility::Utility, population::Rational)
+	return population / (utility.scale_factor)
 end
 
-function removeEmptySteps!(utility::Utility)::Nothing
+function _remove_empty_steps!(utility::Utility)::Nothing
 	utility.steps = [step for step in utility.steps if step["range"] > 0.0001]
 	return nothing
 end
 
-function scaleFactor(vaccinatedIntervals::Vector{Vector{Float64}})::Float64
-	return (1 / (1 - sum([p2 - p1 for (p1, p2) in vaccinatedIntervals])))
+function _scale_factor(vaccinated_intervals::Vector{Vector{Float64}})::Float64
+	return (1 / (1 - sum([p2 - p1 for (p1, p2) in vaccinated_intervals])))
 end
 
-function updateScaleFactor!(utility::Utility, vaccinatedIntervals::Vector)::Nothing
-	utility.scaleFactor *= scaleFactor(vaccinatedIntervals)
+function _update_scale_factor!(utility::Utility, vaccinated_intervals::Vector)::Nothing
+	utility.scale_factor *= _scale_factor(vaccinated_intervals)
 	return nothing
 end
 
-function rescaleUtilitySteps!(
+function _rescale_utility_steps!(
 	utility::Utility,
-	vaccinatedIntervals::Vector{Vector{Float64}},
+	vaccinated_intervals::Vector{Vector{Float64}},
 )::Nothing
-	scalefactor = scaleFactor(vaccinatedIntervals)
+	scale_factor = _scale_factor(vaccinated_intervals)
 
-	startInterval = 0
-	for utilityStep in utility.steps
-		utilityStep["range"] *= scalefactor
-		utilityStep["interval"][1] = startInterval
-		utilityStep["interval"][2] = startInterval + utilityStep["range"]
-		startInterval = utilityStep["interval"][2]
+	start_interval = 0
+	for utility_step in utility.steps
+		utility_step["range"] *= scale_factor
+		utility_step["interval"][1] = start_interval
+		utility_step["interval"][2] = start_interval + utility_step["range"]
+		start_interval = utility_step["interval"][2]
 	end
 
 	return nothing

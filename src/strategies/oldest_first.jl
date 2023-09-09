@@ -1,4 +1,3 @@
-#* Custom Modules
 function run_oldest_first(
 	timestamp::Int64,
 	country::String,
@@ -15,7 +14,7 @@ function run_oldest_first(
 	""")
 
 	# Build counselors utilities
-	utility_A, utility_B = buildUtilities(country, utility)
+	utility_A, utility_B = UtilityFunction.build_utilities(country, utility)
 
 	#Run model
 	iteration::Int64 = 0
@@ -28,8 +27,8 @@ function run_oldest_first(
 		vaccinated_interval::Vector{Float64} = [start_point, end_point]
 
 		if (delta < 1)
-			updateUtility!(utility_A, [vaccinated_interval])
-			updateUtility!(utility_B, [vaccinated_interval])
+			UtilityFunction.update_utility!(utility_A, [vaccinated_interval])
+			UtilityFunction.update_utility!(utility_B, [vaccinated_interval])
 		end
 
 		unvaccinated_population -= V

@@ -1,40 +1,38 @@
-function logisticFunction(x::AbstractFloat,
-	d::AbstractFloat)
+function logistic_function(x::AbstractFloat, d::AbstractFloat)::Float64
 	B = 2000.0
-	expArg = B * (d - x)
-	result::Float64 = 1.0 / ((1.0 + exp(expArg)))
+	exp_arg = B * (d - x)
+	result::Float64 = 1.0 / ((1.0 + exp(exp_arg)))
 
 	return result
 end
 
-function smoothStepFunction(x::AbstractFloat,
-	utilitySteps::Vector{Dict})
+function smooth_step_function(x::AbstractFloat, utility_steps::Vector{Dict})::Float64
 	result::Float64 = 0.0
 
-	for i in eachindex(utilitySteps)
-		utilityStep = utilitySteps[i]
-		stepValue::Float64 = utilityStep["value"]
-		startPoint::Float64 = utilityStep["interval"][1]
-		endPoint::Float64 = utilityStep["interval"][2]
+	for i in eachindex(utility_steps)
+		utility_step = utility_steps[i]
+		step_value::Float64 = utility_step["value"]
+		start_point::Float64 = utility_step["interval"][1]
+		end_point::Float64 = utility_step["interval"][2]
 
-		startEdge::Bool = (i == 1) #|| i == length(utilitySteps))
-		endEdge::Bool = (i == length(utilitySteps))
+		start_edge::Bool = (i == 1) #|| i == length(utilitySteps))
+		end_edge::Bool = (i == length(utility_steps))
 		#? I think instead of 1.0 it shoud be stepValue here...
-		generalizedStart::Float64 = startEdge ? 1.0 : logisticFunction(x, startPoint)
-		generalizedEnd::Float64 = endEdge ? 0.0 : logisticFunction(x, endPoint)
+		generalized_start::Float64 = start_edge ? 1.0 : logistic_function(x, start_point)
+		generalized_end::Float64 = end_edge ? 0.0 : logistic_function(x, end_point)
 
-		result += stepValue * (generalizedStart - generalizedEnd)
+		result += step_value * (generalized_start - generalized_end)
 	end
 
 	return result
 end
 
-function integrateSmoothStepFunction(
-	utilitySteps::Vector{Dict},
-	intervalStart::Float64,
-	intervalEnd::Float64,
+function integrate_smooth_step_function(
+	utility_steps::Vector{Dict},
+	interval_start::Float64,
+	interval_end::Float64,
 )::Float64
-	value, _ = quadgk(x -> smoothStepFunction(x, utilitySteps), intervalStart, intervalEnd)
+	value, _ = quadgk(x -> smooth_step_function(x, utility_steps), interval_start, interval_end)
 
 	return value
 end
