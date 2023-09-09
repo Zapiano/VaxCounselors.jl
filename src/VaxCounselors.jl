@@ -22,10 +22,7 @@ export run_model
 function run_model(countries::Vector{String} = [], setups::Vector{Int64} = [1])
 	println("# Running Model\nCountries: $(countries)\nSetups: $(setups)")
 
-	if length(countries) == 0
-		countries = [String(k) for k in keys(COUNTRIES)]
-	end
-
+	isempty(countries) && (countries = [String(k) for k in keys(COUNTRIES)])
 	timestamp::Int64 = _timestamp()
 
 	for idx_c in countries
