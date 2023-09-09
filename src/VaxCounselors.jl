@@ -44,7 +44,7 @@ function _run_strategies(
 )
 
 	Strategies.run_oldest_first(timestamp, country_index, utility_index, N, V)
-	#runMaximizeUtility(timestamp, countryIndex, utilityIndex, N, V)
+	Strategies.run_maximize_benefit(timestamp, country_index, utility_index, N, V)
 	#runMinimizeUtility(timestamp, countryIndex, utilityIndex, N, V)
 	#runRandomVaccination(timestamp, countryIndex, utilityIndex, N, V)
 	#runEnvyFree(timestamp, countryIndex, utilityIndex, N, V)

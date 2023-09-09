@@ -3,7 +3,8 @@ module UtilityFunction
 using QuadGK
 using VaxCounselors: COUNTRIES, SETUPS, DEMOGRAPHICLABELS
 
-include("./smooth_steps.jl")
+include("smooth_steps.jl")
+include("mini_max_intervals.jl")
 
 export Utility,
 	build_utilities,
