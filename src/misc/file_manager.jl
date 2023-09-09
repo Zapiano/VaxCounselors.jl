@@ -48,7 +48,7 @@ function rescaleBenefits(benefits::Vector{Float64})
 	return resultBenefits
 end
 
-function writeBenefitCSV(
+function write_benefits_CSV(
 	benefitsA::Vector{Float64},
 	benefitsB::Vector{Float64},
 	protocolIndex::Int64,

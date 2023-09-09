@@ -14,12 +14,12 @@ include("utility_function/utility_function.jl")
 
 include("strategies/strategies.jl")
 
-export runModel
+export run_model
 
 """
   function runModel(; countries::Vector{String} = [], setups::Vector{Int64} = 1)
 """
-function runModel(countries::Vector{String} = [], setups::Vector{Int64} = [1])
+function run_model(countries::Vector{String} = [], setups::Vector{Int64} = [1])
 	println("# Running Model\nCountries: $(countries)\nSetups: $(setups)")
 
 	if length(countries) == 0
@@ -40,13 +40,13 @@ end
 
 function run_strategies(
 	timestamp::Int64,
-	countryIndex::String,
-	utilityIndex::Int64;
+	country_index::String,
+	utility_index::Int64;
 	N::Int64 = 10000,
 	V::Int64 = 100,
 )
 
-	Strategies.run_oldest_first(timestamp, countryIndex, utilityIndex, N, V)
+	Strategies.run_oldest_first(timestamp, country_index, utility_index, N, V)
 	#runMaximizeUtility(timestamp, countryIndex, utilityIndex, N, V)
 	#runMinimizeUtility(timestamp, countryIndex, utilityIndex, N, V)
 	#runRandomVaccination(timestamp, countryIndex, utilityIndex, N, V)

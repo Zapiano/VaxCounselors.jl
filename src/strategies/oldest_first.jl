@@ -15,36 +15,35 @@ function run_oldest_first(
 	""")
 
 	# Build counselors utilities
-	utilityA, utilityB = buildUtilities(country, utility)
+	utility_A, utility_B = buildUtilities(country, utility)
 
 	#Run model
 	iteration = 0
-	unvaccinatedPopulation = N
-	while unvaccinatedPopulation > 0
+	unvaccinated_population::Int64 = N
+	while unvaccinated_population > 0
 		# Choose the oldest ones to be vaccinated
-		delta::Float64 = V // unvaccinatedPopulation
-		endPoint::Float64 = 1.0
-		startPoint::Float64 = endPoint - delta
-		vaccinatedInterval::Vector{Float64} = [startPoint, endPoint]
+		delta::Float64 = V / unvaccinated_population
+		end_point::Float64 = 1.0
+		start_point::Float64 = end_point - delta
+		vaccinated_interval::Vector{Float64} = [start_point, end_point]
 
-		lastIteration = (delta >= 1)
-		if !lastIteration
-			updateUtility!(utilityA, [vaccinatedInterval])
-			updateUtility!(utilityB, [vaccinatedInterval])
+		if (delta < 1)
+			updateUtility!(utility_A, [vaccinated_interval])
+			updateUtility!(utility_B, [vaccinated_interval])
 		end
 
-		unvaccinatedPopulation -= V
+		unvaccinated_population -= V
 		iteration += 1
 	end
 
 	# Add last iteration benefit
-	push!(utilityA.benefits, 1.0)
-	push!(utilityB.benefits, 1.0)
+	push!(utility_A.benefits, 1.0)
+	push!(utility_B.benefits, 1.0)
 
 	idx_strategy = 3
-	VaxCounselors.writeBenefitCSV(
-		utilityA.benefits,
-		utilityB.benefits,
+	VaxCounselors.write_benefits_CSV(
+		utility_A.benefits,
+		utility_B.benefits,
 		idx_strategy,
 		timestamp,
 		country,
