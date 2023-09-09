@@ -28,14 +28,14 @@ function run_model(countries::Vector{String} = [], setups::Vector{Int64} = [1])
 	for idx_c in countries
 		for idx_s in setups
 			folders_setup(timestamp, idx_c, idx_s)
-			run_strategies(timestamp, idx_c, idx_s)
+			_run_strategies(timestamp, idx_c, idx_s)
 		end
 	end
 
 	#TODO write utilities csv
 end
 
-function run_strategies(
+function _run_strategies(
 	timestamp::Int64,
 	country_index::String,
 	utility_index::Int64;
