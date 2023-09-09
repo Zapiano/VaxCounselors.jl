@@ -1,4 +1,4 @@
-module Vax
+module VaxCounselors
 
 using Dates
 
