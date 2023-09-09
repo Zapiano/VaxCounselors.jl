@@ -5,7 +5,7 @@ function run_oldest_first(
 	utility::Int64,
 	N::Int64,
 	V::Int64,
-)
+)::Nothing
 	println("""
 		## Running Oldest First with parameters: 
 		  country = $country,
@@ -42,10 +42,14 @@ function run_oldest_first(
 	push!(utilityB.benefits, 1.0)
 
 	idx_strategy = 3
-	writeBenefitCSV(utilityA.benefits,
+	VaxCounselors.writeBenefitCSV(
+		utilityA.benefits,
 		utilityB.benefits,
 		idx_strategy,
 		timestamp,
 		country,
-		utility)
+		utility,
+	)
+
+	return nothing
 end

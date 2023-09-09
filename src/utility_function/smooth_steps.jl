@@ -1,5 +1,3 @@
-using QuadGK
-
 function logisticFunction(x::AbstractFloat,
 	d::AbstractFloat)
 	B = 2000.0

@@ -1,19 +1,14 @@
 using DataFrames
 using CSV
 
-#* Internal 
-#include("../dict/setups.jl")
-#include("../dict/protocols.jl")
-#include("../utilityFunction/smoothStepFunction.jl")
+const OUTPUTDATAFOLDER = "results/data"
 
-const OUTPUTDATAFOLDER = "results/outputData"
-
-function foldersSetup(
+function folders_setup(
 	timestamp::Int64,
 	country::String,
 	utility::Int64,
 )::Nothing
-	pathTimestamp = "$(OUTPUTDATAFOLDER)/$(timestamp)"
+	pathTimestamp = "./$(OUTPUTDATAFOLDER)/$(timestamp)"
 	if !isdir(pathTimestamp)
 		mkdir(pathTimestamp)
 	end
@@ -37,16 +32,17 @@ function utilityFolderName(utility::Int64)::String
 end
 
 function rescaleBenefits(benefits::Vector{Float64})
-	resultBenefits::Float64 = []
+	benefits_length = length(benefits)
+	resultBenefits = zeros(Float64, benefits_length)
 
-	for k in 1:length(benefits)
+	for k in 1:benefits_length
 		factor::Float64 = 1.0
 
 		if k > 1
 			factor = reduce((x1, x2) -> x1 * (1 - x2), benefits[1:k-1]; init = 1)
 		end
 
-		push!(resultBenefits, benefits[k] * factor)
+		resultBenefits[k] = benefits[k] * factor
 	end
 
 	return resultBenefits
@@ -60,8 +56,8 @@ function writeBenefitCSV(
 	country::String,
 	utility::Int64,
 )::Nothing
-
 	# Change benefits scale to match the first iteration scale
+
 	rescaledBenefitsA = rescaleBenefits(benefitsA)
 	rescaledBenefitsB = rescaleBenefits(benefitsB)
 	rescaledBenefits = DataFrame(A = rescaledBenefitsA, B = rescaledBenefitsB)

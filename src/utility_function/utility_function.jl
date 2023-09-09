@@ -1,5 +1,10 @@
 module UtilityFunction
 
+using QuadGK
+using VaxCounselors: COUNTRIES, SETUPS, DEMOGRAPHICLABELS
+
+include("./smooth_steps.jl")
+
 export Utility,
 	buildUtilities,
 	updateUtility!,
@@ -120,7 +125,7 @@ end
 #########* Update Utility ###########
 #*###################################
 
-function updateUtility!(utility::Utility, vaccinatedIntervals::Vector{Float64})
+function updateUtility!(utility::Utility, vaccinatedIntervals::Vector{Vector{Float64}})
 	# Compute benefits of vaccinated population and update utility
 	updateBenefits!(utility, vaccinatedIntervals)
 

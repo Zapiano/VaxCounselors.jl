@@ -11,14 +11,15 @@ include("./dicts/demographicLabels.jl")
 include("./misc/file_manager.jl")
 
 include("utility_function/utility_function.jl")
-include("utility_function/smooth_steps.jl")
 
 include("strategies/strategies.jl")
 
-function runModel(
-	countries::Vector{String},
-	setups::Vector{Int64} = 1,
-)
+export runModel
+
+"""
+  function runModel(; countries::Vector{String} = [], setups::Vector{Int64} = 1)
+"""
+function runModel(countries::Vector{String} = [], setups::Vector{Int64} = [1])
 	println("# Running Model\nCountries: $(countries)\nSetups: $(setups)")
 
 	if length(countries) == 0
@@ -45,7 +46,7 @@ function run_strategies(
 	V::Int64 = 100,
 )
 
-	run_oldest_first(timestamp, countryIndex, utilityIndex, N, V)
+	Strategies.run_oldest_first(timestamp, countryIndex, utilityIndex, N, V)
 	#runMaximizeUtility(timestamp, countryIndex, utilityIndex, N, V)
 	#runMinimizeUtility(timestamp, countryIndex, utilityIndex, N, V)
 	#runRandomVaccination(timestamp, countryIndex, utilityIndex, N, V)
@@ -55,8 +56,8 @@ function run_strategies(
 end
 
 function _timestamp()::Int64
-	d = replace("$(Dates.now)", "-" => "", "T" => "", ":" => "")
-	return parse(Int64, split(d, ".")[1])
+	date = replace("$(Dates.now())", "-" => "", "T" => "", ":" => "")
+	return parse(Int64, split(date, ".")[1])
 end
 
 end # module Vax
