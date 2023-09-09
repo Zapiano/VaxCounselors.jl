@@ -10,6 +10,9 @@ include("./dicts/demographicLabels.jl")
 
 include("./misc/file_manager.jl")
 
+include("utility_function/utility_function.jl")
+include("utility_function/smooth_steps.jl")
+
 include("strategies/strategies.jl")
 
 function runModel(

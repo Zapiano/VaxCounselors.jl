@@ -1,10 +1,5 @@
 module UtilityFunction
 
-include("../dict/countries.jl")
-include("../dict/setups.jl")
-include("../dict/demographicLabels.jl")
-include("smooth_steps.jl")
-
 export Utility,
 	buildUtilities,
 	updateUtility!,
@@ -145,7 +140,7 @@ end
 
 function updateBenefits!(
 	utility::Utility,
-	vaccinatedIntervals::Vector{Vector{Foat64}},
+	vaccinatedIntervals::Vector{Vector{Float64}},
 )::Nothing
 	push!(utility.benefits, integrateUtility(utility, vaccinatedIntervals))
 	return nothing

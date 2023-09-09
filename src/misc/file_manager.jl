@@ -2,8 +2,8 @@ using DataFrames
 using CSV
 
 #* Internal 
-include("../dict/setups.jl")
-include("../dict/protocols.jl")
+#include("../dict/setups.jl")
+#include("../dict/protocols.jl")
 #include("../utilityFunction/smoothStepFunction.jl")
 
 const OUTPUTDATAFOLDER = "results/outputData"
