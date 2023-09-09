@@ -4,5 +4,6 @@ using ..UtilityFunction
 using VaxCounselors
 
 include("maximize_benefit.jl")
+include("minimize_benefit.jl")
 include("oldest_first.jl")
 end
