@@ -11,7 +11,7 @@ include("./dicts/demographicLabels.jl")
 include("./misc/file_manager.jl")
 
 include("utility_function/utility_function.jl")
-
+include("simplex_tools.jl")
 include("strategies/strategies.jl")
 
 export run_model
@@ -43,11 +43,11 @@ function _run_strategies(
 	V::Int64 = 100,
 )
 
-	Strategies.run_oldest_first(timestamp, country_index, utility_index, N, V)
-	Strategies.run_maximize_benefit(timestamp, country_index, utility_index, N, V)
-	Strategies.run_minimize_benefit(timestamp, country_index, utility_index, N, V)
-	Strategies.run_random_vaccination(timestamp, country_index, utility_index, N, V)
-	#runEnvyFree(timestamp, countryIndex, utilityIndex, N, V)
+	#Strategies.run_oldest_first(timestamp, country_index, utility_index, N, V)
+	#Strategies.run_maximize_benefit(timestamp, country_index, utility_index, N, V)
+	#Strategies.run_minimize_benefit(timestamp, country_index, utility_index, N, V)
+	#Strategies.run_random_vaccination(timestamp, country_index, utility_index, N, V)
+	Strategies.run_envy_free(timestamp, country_index, utility_index, N, V)
 
 	#run(`say "Finish country $countryIndex and utility $utilityIndex"`)
 end

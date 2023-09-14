@@ -1,8 +1,9 @@
 module Strategies
 
-using ..UtilityFunction
 using VaxCounselors
+using ..UtilityFunction
 
+include("envy_free.jl")
 include("maximize_benefit.jl")
 include("minimize_benefit.jl")
 include("oldest_first.jl")
