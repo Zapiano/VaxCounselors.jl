@@ -43,10 +43,10 @@ function _run_strategies(
 	V::Int64 = 100,
 )
 
-	#Strategies.run_oldest_first(timestamp, country_index, utility_index, N, V)
-	#Strategies.run_maximize_benefit(timestamp, country_index, utility_index, N, V)
-	#Strategies.run_minimize_benefit(timestamp, country_index, utility_index, N, V)
-	#Strategies.run_random_vaccination(timestamp, country_index, utility_index, N, V)
+	Strategies.run_oldest_first(timestamp, country_index, utility_index, N, V)
+	Strategies.run_maximize_benefit(timestamp, country_index, utility_index, N, V)
+	Strategies.run_minimize_benefit(timestamp, country_index, utility_index, N, V)
+	Strategies.run_random_vaccination(timestamp, country_index, utility_index, N, V)
 	Strategies.run_envy_free(timestamp, country_index, utility_index, N, V)
 
 	#run(`say "Finish country $countryIndex and utility $utilityIndex"`)
