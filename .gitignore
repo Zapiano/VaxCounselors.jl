@@ -2,3 +2,5 @@
 results/*
 .JuliaFormatter.toml
 **/Manifest.toml
+
+sandbox/
