@@ -43,18 +43,18 @@ function _build_utility_steps(country_index::String, utility_ondex::Int64, couns
 
 	intervals::Vector{Int64} = COUNTRIES[country_index]["demographic_intervals"]
 
-	interval_start::Rational{Int64} = 0 // 100
-	interval_end::Rational{Int64} = 0 // 100
+	interval_start::Float64 = 0 / 100
+	interval_end::Float64 = 0 / 100
 	for i in eachindex(intervals)
 		interval_start = interval_end
 		interval_end = interval_start + intervals[i] // 100
-		range::Rational{Int64} = intervals[i] // 100
+		range::Float64 = intervals[i] / 100
 
 		step = Dict(
 			"value" => SETUPS[utility_ondex]["values"][counselor][i],
 			"label" => DEMOGRAPHICLABELS[i],
 			"interval" => [interval_start, interval_end],
-			"range" => range::Rational{Int64},
+			"range" => range::Float64,
 		)
 
 		push!(steps, step)
@@ -163,7 +163,7 @@ function _update_vaccinated_population!(
 
 	for interval in vaccinated_intervals
 		for utility_step in utility.steps
-			vaccinated_in_step::Rational = _vaccinated_population(utility_step, interval)
+			vaccinated_in_step::Float64 = _vaccinated_population(utility_step, interval)
 			utility_step["range"] -= vaccinated_in_step
 
 			# Find index of current step (discounting the skipped steps)
@@ -204,7 +204,7 @@ function _vaccinated_population(
 	end
 end
 
-function _rescaled_population(utility::Utility, population::Rational)
+function _rescaled_population(utility::Utility, population::Float64)
 	return population / (utility.scale_factor)
 end
 
