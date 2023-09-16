@@ -21,7 +21,7 @@ export run_model
 """
   function runModel(; countries::Vector{String} = [], setups::Vector{Int64} = 1)
 """
-function run_model(countries::Vector{String} = [], setups::Vector{Int64} = [1])
+function run_model(countries::Vector{String}, setups::Vector{Int64})::Nothing
 	println("# Running Model\nCountries: $(countries)\nSetups: $(setups)")
 
 	isempty(countries) && (countries = [String(k) for k in keys(COUNTRIES)])
@@ -45,6 +45,14 @@ function run_model(countries::Vector{String} = [], setups::Vector{Int64} = [1])
 	@showprogress pmap(_run_strategies, timestamp_params, countries_params, setups_params)
 
 	#TODO write utilities csv
+	return nothing
+end
+function run_model(setups::Vector{Int64})::Nothing
+	return run_model(Vector{String}[], setups)
+end
+function run_model(countries_range::UnitRange{Int64}, setups::Vector{Int64})::Nothing
+	countries::Vector{String} = collect(keys(COUNTRIES))[countries_range]
+	return run_model(countries, setups)
 end
 
 function _run_strategies(
