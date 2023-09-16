@@ -7,11 +7,9 @@ function run_envy_free(
 	N::Int64,
 	V::Int64,
 )::Nothing
-	# Build utilities
 	utility_A, utility_B = UtilityFunction.build_utilities(country, utility)
 
-	# TODO uncomment this
-	#VaxCounselors.write_utility_density_CSV(utility_A, utility_B, timestamp, country, utility)
+	#TODO VaxCounselors.write_utility_density_CSV(utility_A, utility_B, timestamp, country, utility)
 
 	#TODO allow passing d as argument
 	divisions::Int64 = 99
@@ -31,9 +29,7 @@ function run_envy_free(
 			ef_point::EFPoint = SimplexTools.EFPoint(simplex, utility_A, utility_B)
 			vaccinated_intervals = ef_point.vaccinationIntervals
 
-			#* Iterative Plot
-			#TODO turn log option through a parameter iterativePlot=True/False
-			# plot_iterative(utility_A, utility_B, ef_point, iteration)
+			#TODO plot_iterative(utility_A, utility_B, ef_point, iteration)
 		end
 
 		UtilityFunction.update_utility!(utility_A, vaccinated_intervals)
