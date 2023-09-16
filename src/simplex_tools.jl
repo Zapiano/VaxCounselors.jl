@@ -32,9 +32,11 @@ function Simplex(
 	utility_B::UtilityFunction.Utility,
 )::Simplex
 	points::Vector{Point} = _simplex_points(divisions)
+
+	# Label points and make counselors choose a side for each point
 	_update_simplex_points!(points, vaccines_fraction, utility_A, utility_B)
-	simplex = Simplex(divisions, vaccines_fraction, points)
-	return simplex
+
+	return Simplex(divisions, vaccines_fraction, points)
 end
 
 struct EFPoint{F <: Float64, S <: String}
@@ -81,9 +83,8 @@ function _update_simplex_points!(
 )::Nothing
 	for point in points
 		choosed_side, benefit = _choose_side(
+			point,
 			vaccines_fraction,
-			point.p,
-			point.counselor,
 			utility_A,
 			utility_B,
 		)
@@ -96,20 +97,19 @@ function _update_simplex_points!(
 end
 
 function _choose_side(
+	point::Point,
 	vaccines_fraction::Float64,
-	p::Float64,
-	counselor::String,
 	utility_A::UtilityFunction.Utility,
 	utility_B::UtilityFunction.Utility,
 )::Tuple{String, Float64}
 	# Benefit and Maximum Region for current counselor choosing sides I or II
-	benefit_I = _evaluate_side(vaccines_fraction, SIDES[1], p, counselor, utility_A, utility_B)
-	benefit_II = _evaluate_side(vaccines_fraction, SIDES[2], p, counselor, utility_A, utility_B)
+	benefit_I = _evaluate_side(point, vaccines_fraction, SIDES[1], utility_A, utility_B)
+	benefit_II = _evaluate_side(point, vaccines_fraction, SIDES[2], utility_A, utility_B)
 
 	# If choice_I and choice_II benefits are equal, return side I for counselor A and II for B
 	# Otherwise return the greatest benefit
 	if benefit_I == benefit_II
-		return counselor == "A" ? (SIDES[1], benefit_I) : (SIDES[2], benefit_II)
+		return point.counselor == "A" ? (SIDES[1], benefit_I) : (SIDES[2], benefit_II)
 	else
 		return benefit_I > benefit_II ? (SIDES[1], benefit_I) : (SIDES[2], benefit_II)
 	end
@@ -118,20 +118,19 @@ end
 # Total utility for a given counselor (A or B)
 # Choosing a specific side (I or II) at some point
 function _evaluate_side(
+	point::Point,
 	vaccines_fraction::Float64,
 	side::String,
-	p::Float64,
-	counselor::String,
 	utility_A::UtilityFunction.Utility,
 	utility_B::UtilityFunction.Utility,
 )::Float64
 	# Vectors with current and opposite utilities and sides, in that order
 	utilities::Vector{UtilityFunction.Utility} = [utility_A, utility_B]
-	counselor == "A" || reverse!(utilities)
+	point.counselor == "A" || reverse!(utilities)
 	sides::Vector{String} = [side, filter(!=(side), SIDES)[1]]
 
 	# Vector with current and opposite vaccination intervals, in that order
-	intervals = _vax_intervals(p, utilities, sides, vaccines_fraction)
+	intervals = _vax_intervals(point.p, utilities, sides, vaccines_fraction)
 
 	# Benefits of choosing current and opposite sides
 	# (at current and opposite counselors maximum regions)
