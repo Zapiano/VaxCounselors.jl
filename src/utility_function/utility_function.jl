@@ -67,16 +67,11 @@ function _update_normalization_factor!(utility::Utility)::Float64
 	interval_start::Float64 = 0.0
 	interval_end::Float64 = 1.0
 
-	# when using stepFunction:
-	#value = integrateStepFunction(utility.steps, intervalStart, intervalEnd)
-
-	# when using smoothFunction
 	value::Float64 = integrate_smooth_step_function(
 		utility.steps,
 		interval_start,
 		interval_end,
 	)
-	#value::Float64, err = quadgk(normalizedFunction(utility), 0.0, 1.0, rtol=1e-8)
 
 	utility.normalization_factor = (1.0 / value)
 end
@@ -84,14 +79,8 @@ end
 function integrate_utility(utility::Utility, intervals::Vector{Vector{Float64}})::Float64
 	result::Float64 = 0.0
 
-	#integrateFunction = normalizedFunction(utility)
 	for interval in intervals
-		# when using stepFunction
-		#value::Float64 = integrateStepFunction(utility.steps, intervalStart, intervalEnd)
-
-		# when using smoothStepFunction
 		value = integrate_smooth_step_function(utility.steps, interval[1], interval[2])
-
 		result += value
 	end
 
