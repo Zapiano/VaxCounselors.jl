@@ -1,3 +1,5 @@
+using Base.Threads
+
 mutable struct Interval{F <: Float64}
 	function_value::F
 	limits::Vector{F}
@@ -26,7 +28,7 @@ function mini_max_intervals(
 	# Breaks function domain in Intervals of the same size and,
 	# for each Interval, evaluate the function
 	step = 0.1 * region_size
-	intervals = evaluate_function(utility_steps, step, p, side)
+	intervals::Vector{Interval} = evaluate_function(utility_steps, step, p, side)
 	if length(intervals) == 0
 		return []
 	end
@@ -56,10 +58,10 @@ function evaluate_function(
 	domain_length = length(domain)
 
 	# Intervals that will be returned at the end
-	intervals::Vector{Interval} = []
+	intervals::Vector{Interval} = Vector{Interval}(undef, domain_length - 1)
 
 	# Iterate through the domain, evaluate the function and create Interval
-	for i in 1:(domain_length-1)
+	@threads for i in 1:(domain_length-1)
 		start_point::Float64 = domain[i]
 		end_point::Float64 = domain[i+1]
 		#end_point::Float64 = i == (domain_length - 2) ? 1 : domain[i + 1]
@@ -67,8 +69,7 @@ function evaluate_function(
 		mean_point::Float64 = (delta) / 2 + start_point
 		function_value = smooth_step_function(mean_point, utility_steps)
 
-		interval = Interval(function_value, [start_point, end_point], delta)
-		push!(intervals, interval)
+		intervals[i] = Interval(function_value, [start_point, end_point], delta)
 	end
 
 	return intervals
