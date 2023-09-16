@@ -21,21 +21,15 @@ function run_envy_free(
 	unvaccinated_population::Int64 = N
 	vaccinated_intervals::Vector{Vector{Float64}} = []
 
-	# TODO Now it keeps all EF Points and choose later
-	# TODO It could for each EF point found choose one and discard the other
-	# TODO This way a Vector wouldn't be necessary
-	envy_free_points::Vector{EFPoint} = []
-
 	while unvaccinated_population > 0
 		vaccines_fraction::Float64 = V / unvaccinated_population
 
 		if vaccines_fraction >= 1
 			vaccinated_intervals = [[0.0, 1.0]]
 		else
-			simplex = SimplexTools.Simplex(divisions, vaccines_fraction, utility_A, utility_B)
-			ef_point = SimplexTools.EFPoint(simplex, utility_A, utility_B)
+			simplex::Simplex = SimplexTools.Simplex(divisions, vaccines_fraction, utility_A, utility_B)
+			ef_point::EFPoint = SimplexTools.EFPoint(simplex, utility_A, utility_B)
 			vaccinated_intervals = ef_point.vaccinationIntervals
-			push!(envy_free_points, ef_point)
 
 			#* Iterative Plot
 			#TODO turn log option through a parameter iterativePlot=True/False
@@ -50,9 +44,6 @@ function run_envy_free(
 	end
 
 	#TODO writeVaccinatedPopulationCSV
-
-	#TODO turn log option through a parameter log=True/False
-	# log_ef_points(envy_free_points, timestamp, country, utility)
 
 	idx_strategy::Int64 = 1
 	VaxCounselors.write_benefits_CSV(
