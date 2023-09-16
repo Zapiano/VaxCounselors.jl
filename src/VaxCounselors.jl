@@ -34,10 +34,12 @@ function run_model(countries::Vector{String}, setups::Vector{Int64})::Nothing
 
 	for (idx_c, country) in enumerate(countries)
 		for (idx_s, setup) in enumerate(setups)
-			idx_param = idx_c * idx_s
+			idx_param = length(countries) * (idx_s - 1) + idx_c
+
 			timestamp_params[idx_param] = timestamp
 			countries_params[idx_param] = country
 			setups_params[idx_param] = setup
+
 			folders_setup(timestamp, country, setup)
 		end
 	end
