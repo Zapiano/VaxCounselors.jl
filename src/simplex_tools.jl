@@ -203,7 +203,7 @@ function _mean_point(
 
 	# counselors A and B benefits, in that order
 	benefits = broadcast(UtilityFunction.integrate_utility, utilities, [intervals, intervals])
-	#Main.@infiltrate
+
 	return EFPoint(p, intervals, sides[1], sides[2], benefits[1], benefits[2])
 end
 
