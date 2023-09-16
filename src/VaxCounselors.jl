@@ -1,6 +1,7 @@
 module VaxCounselors
 
 using Dates
+using ProgressBars
 
 # Internal
 include("./dicts/countries.jl")
@@ -25,11 +26,11 @@ function run_model(countries::Vector{String} = [], setups::Vector{Int64} = [1])
 	isempty(countries) && (countries = [String(k) for k in keys(COUNTRIES)])
 	timestamp::Int64 = _timestamp()
 
-	for idx_c in countries
-		for idx_s in setups
-			folders_setup(timestamp, idx_c, idx_s)
-			_run_strategies(timestamp, idx_c, idx_s)
-		end
+	inputs = [(country = c, setup = s) for c in countries for s in setups]
+
+	for input in ProgressBar(inputs)
+		folders_setup(timestamp, input[:country], input[:setup])
+		_run_strategies(timestamp, input[:country], input[:setup])
 	end
 
 	#TODO write utilities csv
