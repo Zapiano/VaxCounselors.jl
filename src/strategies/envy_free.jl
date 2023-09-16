@@ -1,6 +1,4 @@
 using ..SimplexTools
-#using ..Logger
-#using ..Plotter
 
 function run_envy_free(
 	timestamp::Int64,
