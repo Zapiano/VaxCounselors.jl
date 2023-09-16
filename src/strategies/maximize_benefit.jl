@@ -5,14 +5,6 @@ function run_maximize_benefit(
 	N::Int64,
 	V::Int64,
 )::Nothing
-	println("""
-		## Running Maximize Utility with parameters:
-		  country = $country,
-		  utility = $utility,
-		  N = $N,
-		  V = $V
-	""")
-
 	# Build utilities
 	utility_A, utility_B = UtilityFunction.build_utilities(country, utility)
 	avg_utility = UtilityFunction.average_utility(utility_A.steps, utility_B.steps)

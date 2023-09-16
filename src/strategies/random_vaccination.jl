@@ -5,14 +5,6 @@ function run_random_vaccination(
 	N::Int64,
 	V::Int64,
 )::Nothing
-	println("""
-		## Running Random Vaccination with parameters:
-		  country = $country,
-		  utility = $utility,
-		  N = $N,
-		  V = $V
-	""")
-
 	#TODO set seed
 
 	# Build utilities

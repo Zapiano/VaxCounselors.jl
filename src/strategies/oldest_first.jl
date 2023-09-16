@@ -5,14 +5,6 @@ function run_oldest_first(
 	N::Int64,
 	V::Int64,
 )::Nothing
-	println("""
-		## Running Oldest First with parameters:
-		  country = $country,
-		  utility = $utility,
-		  N = $N,
-		  V = $V
-	""")
-
 	# Build counselors utilities
 	utility_A, utility_B = UtilityFunction.build_utilities(country, utility)
 

@@ -7,14 +7,6 @@ function run_envy_free(
 	N::Int64,
 	V::Int64,
 )::Nothing
-	println("""
-		## Running Envy Free with parameters:
-		  country = $country,
-		  utility = $utility,
-		  N = $N,
-		  V = $V
-	""")
-
 	# Build utilities
 	utility_A, utility_B = UtilityFunction.build_utilities(country, utility)
 
@@ -32,9 +24,6 @@ function run_envy_free(
 	envy_free_points::Vector{EFPoint} = []
 
 	while unvaccinated_population > 0
-		println("Iteration $iteration: population = $unvaccinated_population")
-		#println("N = $unvaccinated_population")
-
 		vaccines_fraction::Float64 = V / unvaccinated_population
 
 		if vaccines_fraction >= 1
