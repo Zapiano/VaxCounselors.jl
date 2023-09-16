@@ -11,16 +11,19 @@ function run_envy_free(
 	utility_A, utility_B = UtilityFunction.build_utilities(country, utility)
 
 	# TODO uncomment this
-	#VaxCounselors.writeUtilityDensityCSV(utility_A, utility_B, timestamp, country, utility)
+	#VaxCounselors.write_utility_density_CSV(utility_A, utility_B, timestamp, country, utility)
 
 	#TODO allow passing d as argument
 	divisions::Int64 = 99
 
-	#Run model
-	iteration = 0
+	# Set parameters to run model
+	iteration::Int64 = 0
 	unvaccinated_population::Int64 = N
 	vaccinated_intervals::Vector{Vector{Float64}} = []
 
+	# TODO Now it keeps all EF Points and choose later
+	# TODO It could for each EF point found choose one and discard the other
+	# TODO This way a Vector wouldn't be necessary
 	envy_free_points::Vector{EFPoint} = []
 
 	while unvaccinated_population > 0
@@ -36,7 +39,7 @@ function run_envy_free(
 
 			#* Iterative Plot
 			#TODO turn log option through a parameter iterativePlot=True/False
-			# plotIterative(utility_A, utility_B, ef_point, iteration)
+			# plot_iterative(utility_A, utility_B, ef_point, iteration)
 		end
 
 		UtilityFunction.update_utility!(utility_A, vaccinated_intervals)
@@ -49,7 +52,7 @@ function run_envy_free(
 	#TODO writeVaccinatedPopulationCSV
 
 	#TODO turn log option through a parameter log=True/False
-	# logEnvy_free_points(envy_free_points,timestamp,country,utility)
+	# log_ef_points(envy_free_points, timestamp, country, utility)
 
 	idx_strategy::Int64 = 1
 	VaxCounselors.write_benefits_CSV(
