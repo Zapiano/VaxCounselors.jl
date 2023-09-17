@@ -1,5 +1,11 @@
 # VaxCounselors.jl
 
+This is a model developed for a Master's Project at Universidade de São Paulo (University
+of São Paulo). It simulates the distribution of vaccines for a population of individuals in
+a pandemic context using an Envy-Free strategy. Other strategies (Maximize-Benefit,
+Minimize-Benefit, Oldest-First and Random-Vaccination) were also implemented for comparison
+purposes.
+
 ## Quickstart
 
 To install VaxCounselors.jl run
