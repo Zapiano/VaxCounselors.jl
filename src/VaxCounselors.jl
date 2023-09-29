@@ -5,12 +5,12 @@ using Distributed
 using ProgressMeter
 
 # Internal
-include("./dicts/countries.jl")
-include("./dicts/setups.jl")
-include("./dicts/protocols.jl")
-include("./dicts/demographicLabels.jl")
+include("../dict/countries.jl")
+include("../dict/setups.jl")
+include("../dict/protocols.jl")
+include("../dict/demographicLabels.jl")
 
-include("./misc/file_manager.jl")
+include("../io/io.jl")
 
 include("utility_function/utility_function.jl")
 include("simplex_tools.jl")
