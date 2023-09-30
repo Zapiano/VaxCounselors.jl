@@ -1,7 +1,7 @@
 using ..SimplexTools
 
 function run_envy_free(
-    timestamp::Int64, country::String, setup::Int64, N::Int64, V::Int64
+    timestamp::Int64, country::String, setup::Symbol, N::Int64, V::Int64
 )::Nothing
     utility_A, utility_B = UtilityFunction.build_utilities(country, setup)
 

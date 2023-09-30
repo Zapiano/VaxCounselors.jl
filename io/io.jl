@@ -5,7 +5,7 @@ using CSV
 
 const OUTPUTDATAFOLDER = "results/data"
 
-function folders_setup(timestamp::Int64, country::String, setup::Int64)::Nothing
+function folders_setup(timestamp::Int64, country::String, setup::Symbol)::Nothing
     pathTimestamp = "./$(OUTPUTDATAFOLDER)/$(timestamp)"
     if !isdir(pathTimestamp)
         mkdir(pathTimestamp)
@@ -16,8 +16,7 @@ function folders_setup(timestamp::Int64, country::String, setup::Int64)::Nothing
         mkdir(pathCountry)
     end
 
-    setup_name = SETUPS[setup]["name"]
-    pathUtilities = "$(pathCountry)/$(setup_name)"
+    pathUtilities = "$(pathCountry)/$(setup)"
     if !isdir(pathUtilities)
         mkdir(pathUtilities)
     end
@@ -31,7 +30,7 @@ function write_benefits_CSV(
     protocolIndex::Int64,
     timestamp::Int64,
     country::String,
-    setup::Int64,
+    setup::Symbol,
 )::Nothing
     # Change benefits scale to match the first iteration scale
 
@@ -65,9 +64,8 @@ function _rescale_benefits(benefits::Vector{Float64})
     return resultBenefits
 end
 
-function _output_data_path(timestamp::Int64, country::String, setup::Int64)::String
-    setup_name = SETUPS[setup]["name"]
-    return ("$(OUTPUTDATAFOLDER)/$(timestamp)/$(country)/$(setup_name)")
+function _output_data_path(timestamp::Int64, country::String, setup::Symbol)::String
+    return ("$(OUTPUTDATAFOLDER)/$(timestamp)/$(country)/$(setup)")
 end
 
 function write_utility_density_CSV(
@@ -75,7 +73,7 @@ function write_utility_density_CSV(
     utility_B::UtilityFunction.Utility,
     timestamp::Int64,
     country::String,
-    setup::Int64,
+    setup::Symbol,
 )::Nothing
     step = 0.001
     values_A = [UtilityFunction.smooth_step_function(x, utility_A.steps) for x in 0:step:1]

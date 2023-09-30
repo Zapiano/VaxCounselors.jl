@@ -24,7 +24,7 @@ export run_model
 """
   function runModel(; countries::Vector{String} = [], setups::Vector{Int64} = 1)
 """
-function run_model(countries::Vector{String}, setups::Vector{Int64})::Nothing
+function run_model(countries::Vector{String}, setups::Vector{Symbol})::Nothing
     println("# Running Model\nCountries: $(countries)\nSetups: $(setups)")
 
     isempty(countries) && (countries = [String(k) for k in keys(COUNTRIES)])
@@ -33,7 +33,7 @@ function run_model(countries::Vector{String}, setups::Vector{Int64})::Nothing
     params_length = length(countries) * length(setups)
     timestamp_params::Vector{Int64} = zeros(Int64, params_length)
     countries_params::Vector{String} = Vector{String}(undef, params_length)
-    setups_params::Vector{Int64} = zeros(Int64, params_length)
+    setups_params::Vector{Symbol} = Vector{Symbol}(undef, params_length)
 
     for (idx_c, country) in enumerate(countries)
         for (idx_s, setup) in enumerate(setups)
@@ -52,16 +52,16 @@ function run_model(countries::Vector{String}, setups::Vector{Int64})::Nothing
     #TODO write utilities csv
     return nothing
 end
-function run_model(setups::Vector{Int64})::Nothing
+function run_model(setups::Vector{Symbol})::Nothing
     return run_model(Vector{String}[], setups)
 end
-function run_model(countries_range::UnitRange{Int64}, setups::Vector{Int64})::Nothing
+function run_model(countries_range::UnitRange{Int64}, setups::Vector{Symbol})::Nothing
     countries::Vector{String} = collect(keys(COUNTRIES))[countries_range]
     return run_model(countries, setups)
 end
 
 function _run_strategies(
-    timestamp::Int64, country::String, setup::Int64; N::Int64=10000, V::Int64=100
+    timestamp::Int64, country::String, setup::Symbol; N::Int64=10000, V::Int64=100
 )
     Strategies.run_oldest_first(timestamp, country, setup, N, V)
     Strategies.run_maximize_benefit(timestamp, country, setup, N, V)
