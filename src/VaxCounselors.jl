@@ -4,7 +4,6 @@ using Dates
 using Distributed
 using ProgressMeter
 
-# Internal
 include("../dict/countries.jl")
 include("../dict/setups.jl")
 include("../dict/demographicLabels.jl")
@@ -69,8 +68,6 @@ function _run_strategies(
     Strategies.run_minimize_benefit(timestamp, country, setup, N, V)
     Strategies.run_random_vaccination(timestamp, country, setup, N, V)
     return Strategies.run_envy_free(timestamp, country, setup, N, V)
-
-    #run(`say "Finish country $countryIndex and utility $utilityIndex"`)
 end
 
 function _timestamp()::Int64
@@ -78,4 +75,4 @@ function _timestamp()::Int64
     return parse(Int64, split(date, ".")[1])
 end
 
-end # module Vax
+end
