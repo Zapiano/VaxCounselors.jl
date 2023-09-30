@@ -44,13 +44,18 @@ function plot_benefits(
         end
     end
 
+    _render_benefits_legend!(f)
+
+    return f
+end
+
+function _render_benefits_legend!(f)::Nothing
     line_elements = [
         LineElement(; color=COLORS.counselors[c], linestyle=nothing) for
         c in [:A, :B, :mean]
     ]
     Legend(
-        f[1:end, 3], line_elements, [L"C_A", L"C_B", "Mean"]; framevisible=false, rowgap=4
+        f[1:end, 3], line_elements, [L"C_A", L"C_B", "Mean"]; framevisible=false, rowgap=5
     )
-
-    return f
+    return nothing
 end
