@@ -1,19 +1,21 @@
 module Viz
 
+include("./theme.jl")
+
 using CairoMakie
 using CSV
 using NamedDims
 using AxisKeys
 
 function get_benefits(data_folder::String)::NamedDimsArray
-    countries = readdir(data_folder)
-    setups = readdir("$(data_folder)/$(countries[1])")
+    countries = Symbol.(readdir(data_folder))
+    setups = Symbol.(readdir("$(data_folder)/$(countries[1])"))
     benefit_files = filter(
         x -> split(x, "__")[1] == "benefit",
         readdir("$(data_folder)/$(countries[1])/$(setups[1])"),
     )
 
-    strategies = [split(split(s, "__")[2], ".")[1] for s in benefit_files]
+    strategies = Symbol.([split(split(s, "__")[2], ".")[1] for s in benefit_files])
     counselors = [:A, :B]
 
     tmp_file = CSV.File(
@@ -48,45 +50,49 @@ function get_benefits(data_folder::String)::NamedDimsArray
     return benefits
 end
 
-function plot_benefits(benefits::NamedDimsArray; country="usa", setup="default")
+function plot_benefits(benefits::NamedDimsArray; country=:usa, setup=:default)
     f = Figure()
 
     # 3-dimensional NamedDimsArray
     _benefits = benefits[:, :, :, Key(setup), Key(country)]
-    strategies = _labels(_benefits, :strategies)
+    strategies_keys = sort(Symbol.(_get_axiskeys(_benefits, :strategies)))
+    sort!(strategies_keys; by=x -> LABELS_LETTERS[:strategies][x])
+    strategies_labels = LABELS_LETTERS.strategies
 
     y_low, y_high = get_y_limits(_benefits)
 
-    n_figures = length(strategies)
+    n_figures = length(strategies_keys)
     n_cols, n_rows = get_cols_rows(n_figures)
 
     for col in 1:n_cols, row in 1:n_rows
         index = col + n_cols * (row - 1)
 
         if index <= n_figures
-            benefits_A = collect(_benefits[:, Key(:A), index])
-            benefits_B = collect(_benefits[:, Key(:B), index])
-            benefits_mean = (benefits_A + benefits_B) / 2
-
-            timesteps = _labels(_benefits, :timesteps)
-
+            strategy = strategies_keys[index]
+            subtitle = strategies_labels[strategy]
             ax = Axis(
                 f[row, col];
-                title=strategies[index],
+                title=subtitle,
                 xlabel="Timesteps",
                 ylabel="Benefit",
                 limits=(nothing, (y_low, y_high)),
             )
-            lines!(ax, timesteps, benefits_A; color=:orange)
-            lines!(ax, timesteps, benefits_B; color=:blue)
-            lines!(ax, timesteps, benefits_mean; color=:black)
+
+            timesteps = _get_axiskeys(_benefits, :timesteps)
+            benefits_A = collect(_benefits[:, Key(:A), Key(strategy)])
+            benefits_B = collect(_benefits[:, Key(:B), Key(strategy)])
+            benefits_mean = (benefits_A + benefits_B) / 2
+
+            lines!(ax, timesteps, benefits_A; color=COLORS.counselors.A)
+            lines!(ax, timesteps, benefits_B; color=COLORS.counselors.B)
+            lines!(ax, timesteps, benefits_mean; color=COLORS.counselors.mean)
         end
     end
 
     return f
 end
 
-function _labels(data::NamedDimsArray, dimname::Symbol)
+function _get_axiskeys(data::NamedDimsArray, dimname::Symbol)
     return axiskeys(data)[findall(x -> x == dimname, dimnames(data))][1]
 end
 
