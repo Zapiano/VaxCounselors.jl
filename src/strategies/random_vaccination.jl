@@ -28,9 +28,13 @@ function run_random_vaccination(
         iteration += 1
     end
 
-    idx_strategy::Int64 = 4
     VaxCounselors.write_benefits_CSV(
-        utility_A.benefits, utility_B.benefits, idx_strategy, timestamp, country, setup
+        utility_A.benefits,
+        utility_B.benefits,
+        :random_vaccination,
+        timestamp,
+        country,
+        setup,
     )
 
     return nothing

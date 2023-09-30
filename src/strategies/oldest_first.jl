@@ -27,9 +27,8 @@ function run_oldest_first(
     push!(utility_A.benefits, 1.0)
     push!(utility_B.benefits, 1.0)
 
-    idx_strategy::Int64 = 3
     VaxCounselors.write_benefits_CSV(
-        utility_A.benefits, utility_B.benefits, idx_strategy, timestamp, country, setup
+        utility_A.benefits, utility_B.benefits, :oldest_first, timestamp, country, setup
     )
 
     return nothing

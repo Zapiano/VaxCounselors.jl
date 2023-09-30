@@ -28,9 +28,8 @@ function run_minimize_benefit(
         iteration += 1
     end
 
-    idx_strategy::Int64 = 5
     VaxCounselors.write_benefits_CSV(
-        utility_A.benefits, utility_B.benefits, idx_strategy, timestamp, country, setup
+        utility_A.benefits, utility_B.benefits, :minimize_benefit, timestamp, country, setup
     )
 
     return nothing

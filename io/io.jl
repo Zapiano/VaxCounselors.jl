@@ -27,7 +27,7 @@ end
 function write_benefits_CSV(
     benefitsA::Vector{Float64},
     benefitsB::Vector{Float64},
-    protocolIndex::Int64,
+    strategy::Symbol,
     timestamp::Int64,
     country::String,
     setup::Symbol,
@@ -40,8 +40,7 @@ function write_benefits_CSV(
 
     # Export benefits to csv
     outDataPath = _output_data_path(timestamp, country, setup)
-    protocolName = PROTOCOLS[protocolIndex]
-    csvPath = "$(outDataPath)/benefit__$(protocolName).csv"
+    csvPath = "$(outDataPath)/benefit__$(strategy).csv"
     CSV.write(csvPath, rescaledBenefits; header=true)
 
     return nothing

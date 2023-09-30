@@ -39,9 +39,8 @@ function run_envy_free(
 
     #TODO writeVaccinatedPopulationCSV
 
-    idx_strategy::Int64 = 1
     VaxCounselors.write_benefits_CSV(
-        utility_A.benefits, utility_B.benefits, idx_strategy, timestamp, country, setup
+        utility_A.benefits, utility_B.benefits, :envy_free, timestamp, country, setup
     )
 
     return nothing
