@@ -1,5 +1,11 @@
 # VaxCounselors.jl
 
+[![code style blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
+
+`VaxCounselors` is a envy-free based model for vaccines distribution.
+
+----
+
 This is a model developed for a Master's Project at Universidade de São Paulo (University
 of São Paulo). It simulates the distribution of vaccines for a population of individuals in
 a pandemic context using an Envy-Free strategy. Other strategies (Maximize-Benefit,
