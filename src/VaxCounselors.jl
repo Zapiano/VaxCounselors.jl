@@ -25,9 +25,11 @@ export run_model
   function runModel(; countries::Vector{String} = [], setups::Vector{Int64} = 1)
 """
 function run_model(countries::Vector{String}, setups::Vector{Symbol})::Nothing
+    isempty(countries) && (countries = [String(k) for k in keys(COUNTRIES)])
+    isempty(setups) && (setups = keys(SETUPS)[1:4])
+
     println("# Running Model\nCountries: $(countries)\nSetups: $(setups)")
 
-    isempty(countries) && (countries = [String(k) for k in keys(COUNTRIES)])
     timestamp::Int64 = _timestamp()
 
     params_length = length(countries) * length(setups)
