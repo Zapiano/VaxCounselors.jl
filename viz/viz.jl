@@ -51,7 +51,7 @@ function get_benefits(data_folder::String)::NamedDimsArray
     return benefits
 end
 
-function _get_axiskeys(data::NamedDimsArray, dimname::Symbol)
+function get_axiskeys(data::NamedDimsArray, dimname::Symbol)
     return axiskeys(data)[findall(x -> x == dimname, dimnames(data))][1]
 end
 

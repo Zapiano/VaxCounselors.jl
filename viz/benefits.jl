@@ -10,7 +10,7 @@ function plot_benefits(
 
     # 3-dimensional NamedDimsArray
     _benefits = benefits[:, :, :, Key(setup), Key(country)]
-    strategies_keys = sort(Symbol.(_get_axiskeys(_benefits, :strategies)))
+    strategies_keys = sort(Symbol.(get_axiskeys(_benefits, :strategies)))
     sort!(strategies_keys; by=x -> LABELS_LETTERS[:strategies][x])
     strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS.strategies
 
@@ -33,7 +33,7 @@ function plot_benefits(
                 limits=(nothing, (y_low, y_high)),
             )
 
-            timesteps = _get_axiskeys(_benefits, :timesteps)
+            timesteps = get_axiskeys(_benefits, :timesteps)
             benefits_A = collect(_benefits[:, Key(:A), Key(strategy)])
             benefits_B = collect(_benefits[:, Key(:B), Key(strategy)])
             benefits_mean = (benefits_A + benefits_B) / 2
