@@ -1,101 +1,95 @@
+using ..UtilityFunction
+
 using DataFrames
 using CSV
 
 const OUTPUTDATAFOLDER = "results/data"
 
-function folders_setup(
-	timestamp::Int64,
-	country::String,
-	utility::Int64,
-)::Nothing
-	pathTimestamp = "./$(OUTPUTDATAFOLDER)/$(timestamp)"
-	if !isdir(pathTimestamp)
-		mkdir(pathTimestamp)
-	end
+function folders_setup(timestamp::Int64, country::String, setup::Int64)::Nothing
+    pathTimestamp = "./$(OUTPUTDATAFOLDER)/$(timestamp)"
+    if !isdir(pathTimestamp)
+        mkdir(pathTimestamp)
+    end
 
-	pathCountry = "$(pathTimestamp)/$(country)"
-	if !isdir(pathCountry)
-		mkdir(pathCountry)
-	end
+    pathCountry = "$(pathTimestamp)/$(country)"
+    if !isdir(pathCountry)
+        mkdir(pathCountry)
+    end
 
-	utilFolderName = _utility_folder_name(utility)
-	pathUtilities = "$(pathCountry)/$(utilFolderName)"
-	if !isdir(pathUtilities)
-		mkdir(pathUtilities)
-	end
+    setup_name = SETUPS[setup]["name"]
+    pathUtilities = "$(pathCountry)/$(setup_name)"
+    if !isdir(pathUtilities)
+        mkdir(pathUtilities)
+    end
 
-	return nothing
+    return nothing
 end
 
 function write_benefits_CSV(
-	benefitsA::Vector{Float64},
-	benefitsB::Vector{Float64},
-	protocolIndex::Int64,
-	timestamp::Int64,
-	country::String,
-	utility::Int64,
+    benefitsA::Vector{Float64},
+    benefitsB::Vector{Float64},
+    protocolIndex::Int64,
+    timestamp::Int64,
+    country::String,
+    setup::Int64,
 )::Nothing
-	# Change benefits scale to match the first iteration scale
+    # Change benefits scale to match the first iteration scale
 
-	rescaledBenefitsA = _rescale_benefits(benefitsA)
-	rescaledBenefitsB = _rescale_benefits(benefitsB)
-	rescaledBenefits = DataFrame(A = rescaledBenefitsA, B = rescaledBenefitsB)
+    rescaledBenefitsA = _rescale_benefits(benefitsA)
+    rescaledBenefitsB = _rescale_benefits(benefitsB)
+    rescaledBenefits = DataFrame(; A=rescaledBenefitsA, B=rescaledBenefitsB)
 
-	# Export benefits to csv
-	outDataPath = _output_data_path(timestamp, country, utility)
-	protocolName = PROTOCOLS[protocolIndex]
-	csvPath = "$(outDataPath)/benefit__$(protocolName).csv"
-	CSV.write(csvPath, rescaledBenefits, header = true)
+    # Export benefits to csv
+    outDataPath = _output_data_path(timestamp, country, setup)
+    protocolName = PROTOCOLS[protocolIndex]
+    csvPath = "$(outDataPath)/benefit__$(protocolName).csv"
+    CSV.write(csvPath, rescaledBenefits; header=true)
 
-	return nothing
-end
-
-function _utility_folder_name(utility::Int64)::String
-	return SETUPS[utility]["name"]
+    return nothing
 end
 
 function _rescale_benefits(benefits::Vector{Float64})
-	benefits_length = length(benefits)
-	resultBenefits = zeros(Float64, benefits_length)
+    benefits_length = length(benefits)
+    resultBenefits = zeros(Float64, benefits_length)
 
-	for k in 1:benefits_length
-		factor::Float64 = 1.0
+    for k in 1:benefits_length
+        factor::Float64 = 1.0
 
-		if k > 1
-			factor = reduce((x1, x2) -> x1 * (1 - x2), benefits[1:k-1]; init = 1)
-		end
+        if k > 1
+            factor = reduce((x1, x2) -> x1 * (1 - x2), benefits[1:(k - 1)]; init=1)
+        end
 
-		resultBenefits[k] = benefits[k] * factor
-	end
+        resultBenefits[k] = benefits[k] * factor
+    end
 
-	return resultBenefits
+    return resultBenefits
 end
 
-function _output_data_path(timestamp::Int64, country::String, utility::Int64)::String
-	utilFolderName = _utility_folder_name(utility)
-	return ("$(OUTPUTDATAFOLDER)/$(timestamp)/$(country)/$(utilFolderName)")
+function _output_data_path(timestamp::Int64, country::String, setup::Int64)::String
+    setup_name = SETUPS[setup]["name"]
+    return ("$(OUTPUTDATAFOLDER)/$(timestamp)/$(country)/$(setup_name)")
 end
 
-#function write_utility_density_CSV(
-#	utilityA,
-#	utilityB,
-#	timestamp,
-#	country,
-#	utility,
-#)::Nothing
-#	step = 0.001
-#	valuesA = [smoothStepFunction(x, utilityA.steps) for x in 0:step:1]
-#	valuesB = [smoothStepFunction(x, utilityB.steps) for x in 0:step:1]
-#	normalizedA = valuesA * utilityA.normalizationFactor
-#	normalizedB = valuesB * utilityB.normalizationFactor
-#	valuesMean = (normalizedA + normalizedB) / 2
-#
-#	valuesDf = DataFrame(A = normalizedA, B = normalizedB, mean = valuesMean)
-#
-#	# Export benefits to csv
-#	outDataPath = _output_data_path(timestamp, country, utility)
-#	csvPath = "$outDataPath/utility_density.csv"
-#	CSV.write(csvPath, valuesDf, header = true)
-#
-#	return nothing
-#end
+function write_utility_density_CSV(
+    utility_A::UtilityFunction.Utility,
+    utility_B::UtilityFunction.Utility,
+    timestamp::Int64,
+    country::String,
+    setup::Int64,
+)::Nothing
+    step = 0.001
+    values_A = [UtilityFunction.smooth_step_function(x, utility_A.steps) for x in 0:step:1]
+    values_B = [UtilityFunction.smooth_step_function(x, utility_B.steps) for x in 0:step:1]
+    normalized_A = values_A * utility_A.normalization_factor
+    normalized_B = values_B * utility_B.normalization_factor
+    values_mean = (normalized_A + normalized_B) / 2
+
+    values_df = DataFrame(; A=normalized_A, B=normalized_B, mean=values_mean)
+
+    # Export benefits to csv
+    out_data_path = _output_data_path(timestamp, country, setup)
+    csv_path = "$(out_data_path)/utility_density.csv"
+    CSV.write(csv_path, values_df; header=true)
+
+    return nothing
+end
