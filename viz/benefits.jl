@@ -1,6 +1,7 @@
+using AxisKeys
 using CairoMakie
 using NamedDims
-using AxisKeys
+using LaTeXStrings
 
 function plot_benefits(
     benefits::NamedDimsArray; country=:usa, setup=:default, label_letters=true
@@ -42,6 +43,14 @@ function plot_benefits(
             lines!(ax, timesteps, benefits_mean; color=COLORS.counselors.mean)
         end
     end
+
+    line_elements = [
+        LineElement(; color=COLORS.counselors[c], linestyle=nothing) for
+        c in [:A, :B, :mean]
+    ]
+    Legend(
+        f[1:end, 3], line_elements, [L"C_A", L"C_B", "Mean"]; framevisible=false, rowgap=4
+    )
 
     return f
 end
