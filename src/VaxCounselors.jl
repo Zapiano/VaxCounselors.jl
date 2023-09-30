@@ -12,6 +12,8 @@ include("../dict/demographicLabels.jl")
 
 include("../io/io.jl")
 
+include("../viz/viz.jl")
+
 include("utility_function/utility_function.jl")
 include("simplex_tools.jl")
 include("strategies/strategies.jl")
