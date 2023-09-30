@@ -7,7 +7,6 @@ using ProgressMeter
 # Internal
 include("../dict/countries.jl")
 include("../dict/setups.jl")
-include("../dict/protocols.jl")
 include("../dict/demographicLabels.jl")
 
 include("utility_function/utility_function.jl")
