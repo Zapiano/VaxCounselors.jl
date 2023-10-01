@@ -1,16 +1,37 @@
+using LaTeXStrings
+
 const LABELS = (
-    strategies=(
-        envy_free="Envy-Free",
-        maximize_benefit="Maximize-Benefit",
-        minimize_benefit="Minimize-Benefit",
-        oldest_first="Oldest-First",
-        random_vaccination="Random Vaccination",
+    en=(
+        strategies=(
+            envy_free="Envy-Free",
+            maximize_benefit="Maximize-Benefit",
+            minimize_benefit="Minimize-Benefit",
+            oldest_first="Oldest-First",
+            random_vaccination="Random Vaccination",
+        ),
+        setups=(
+            default="Default",
+            transmissibility="Transmissibility",
+            symptomatology="Symptomatology",
+            concentrated="Concentrated",
+        ),
+        counselors=(A=L"C_A", B=L"C_B", mean="Mean"),
     ),
-    setups=(
-        default="Default",
-        transmissibility="Transmissibility",
-        symptomatology="Symptomatology",
-        concentrated="Concentrated",
+    pt=(
+        strategies=(
+            envy_free="Envy-Free",
+            maximize_benefit="Maximize-Benefit",
+            minimize_benefit="Minimize-Benefit",
+            oldest_first="Oldest-First",
+            random_vaccination="Random Vaccination",
+        ),
+        setups=(
+            default="Padrão",
+            transmissibility="Transmissibilidade",
+            symptomatology="Simtomatologia",
+            concentrated="Concentrado",
+        ),
+        counselors=(A=L"C_A", B=L"C_B", mean="Média"),
     ),
 )
 
@@ -35,5 +56,12 @@ const COLORS = (
         minimize_benefit=:green,
         oldest_first=:brown,
         random_vaccination=:orange,
+    ),
+)
+
+const AXIS = (
+    en=(utility="Utility", benefit="Benefit", timesteps="Time", population="Population"),
+    pt=(
+        utility="Utilidade", benefit="Benefício", timesteps="Tempo", population="População"
     ),
 )

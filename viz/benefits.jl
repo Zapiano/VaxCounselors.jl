@@ -4,7 +4,7 @@ using NamedDims
 using LaTeXStrings
 
 function plot_benefits(
-    benefits::NamedDimsArray; country=:usa, setup=:default, label_letters=true
+    benefits::NamedDimsArray; country=:usa, setup=:default, label_letters=true, lang=:en
 )
     f = Figure()
 
@@ -12,7 +12,7 @@ function plot_benefits(
     _benefits = benefits[:, :, :, Key(setup), Key(country)]
     strategies_keys = sort(Symbol.(get_axiskeys(_benefits, :strategies)))
     sort!(strategies_keys; by=x -> LABELS_LETTERS[:strategies][x])
-    strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS.strategies
+    strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS[lang].strategies
 
     y_low, y_high = get_y_limits(_benefits)
 
@@ -28,8 +28,8 @@ function plot_benefits(
             ax = Axis(
                 f[row, col];
                 title=subtitle,
-                xlabel="Timesteps",
-                ylabel="Benefit",
+                xlabel=AXIS[lang].timesteps,
+                ylabel=AXIS[lang].benefit,
                 limits=(nothing, (y_low, y_high)),
             )
 
@@ -44,18 +44,23 @@ function plot_benefits(
         end
     end
 
-    _render_benefits_legend!(f)
+    _render_benefits_legend!(f, lang)
 
     return f
 end
 
-function _render_benefits_legend!(f)::Nothing
+function _render_benefits_legend!(f, lang)::Nothing
     line_elements = [
         LineElement(; color=COLORS.counselors[c], linestyle=nothing) for
         c in [:A, :B, :mean]
     ]
+    _labels = LABELS[lang].counselors
     Legend(
-        f[1:end, 3], line_elements, [L"C_A", L"C_B", "Mean"]; framevisible=false, rowgap=5
+        f[1:end, 3],
+        line_elements,
+        [_labels.A, _labels.B, _labels.mean];
+        framevisible=false,
+        rowgap=5,
     )
     return nothing
 end

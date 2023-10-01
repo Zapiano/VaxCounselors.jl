@@ -3,14 +3,16 @@ using CairoMakie
 using NamedDims
 using LaTeXStrings
 
-function plot_utilities(utilities::NamedDimsArray; country=:usa, label_letters=false)
+function plot_utilities(
+    utilities::NamedDimsArray; country=:usa, label_letters=false, lang=:en
+)
     f = Figure()
 
     # 3-dimensional NamedDimsArray
     _utilities = utilities[:, :, :, Key(country)]
     setup_keys = sort(Symbol.(get_axiskeys(_utilities, :setups)))
     sort!(setup_keys; by=x -> LABELS_LETTERS[:setups][x])
-    setup_labels = label_letters ? LABELS_LETTERS.setups : LABELS.setups
+    setup_labels = label_letters ? LABELS_LETTERS.setups : LABELS[lang].setups
 
     y_low, y_high = get_y_limits(_utilities)
 
@@ -26,8 +28,8 @@ function plot_utilities(utilities::NamedDimsArray; country=:usa, label_letters=f
             ax = Axis(
                 f[row, col];
                 title=subtitle,
-                xlabel="Timesteps",
-                ylabel="Utility",
+                xlabel=AXIS[lang].population,
+                ylabel=AXIS[lang].utility,
                 limits=(nothing, (y_low, y_high)),
             )
 
@@ -42,18 +44,23 @@ function plot_utilities(utilities::NamedDimsArray; country=:usa, label_letters=f
         end
     end
 
-    _render_utilities_legend!(f)
+    _render_utilities_legend!(f, lang)
 
     return f
 end
 
-function _render_utilities_legend!(f)::Nothing
+function _render_utilities_legend!(f, lang)::Nothing
     line_elements = [
         LineElement(; color=COLORS.counselors[c], linestyle=nothing) for
         c in [:A, :B, :mean]
     ]
+    _labels = LABELS[lang].counselors
     Legend(
-        f[1:end, 3], line_elements, [L"C_A", L"C_B", "Mean"]; framevisible=false, rowgap=5
+        f[1:end, 3],
+        line_elements,
+        [_labels.A, _labels.B, _labels.mean];
+        framevisible=false,
+        rowgap=5,
     )
     return nothing
 end
