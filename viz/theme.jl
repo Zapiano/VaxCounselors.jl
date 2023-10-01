@@ -6,7 +6,12 @@ const LABELS = (
         oldest_first="Oldest-First",
         random_vaccination="Random Vaccination",
     ),
-    setups=(default="Default", symptomatology="Symptolatology"),
+    setups=(
+        default="Default",
+        transmissibility="Transmissibility",
+        symptomatology="Symptomatology",
+        concentrated="Concentrated",
+    ),
 )
 
 const LABELS_LETTERS = (
@@ -17,7 +22,9 @@ const LABELS_LETTERS = (
         oldest_first="(c)",
         random_vaccination="(a)",
     ),
-    setups=(default="(a)", symptomatology="(b)"),
+    setups=(
+        default="(a)", transmissibility="(b)", symptomatology="(c)", concentrated="(d)"
+    ),
 )
 
 const COLORS = (
