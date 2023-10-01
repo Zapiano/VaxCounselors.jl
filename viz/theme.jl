@@ -95,6 +95,7 @@ const AXIS = (
         population="Population",
         abdiff="A-B Difference",
         abcumdiff="Cumulative A-B Difference",
+        cum_mean_benefit="Cumulative Mean Benefit",
     ),
     pt=(
         utility="Utilidade",
@@ -103,5 +104,6 @@ const AXIS = (
         population="População",
         abdiff="Diferença A-B",
         abcumdiff="Diferença A-B Cumulativa",
+        cum_mean_benefit="Benefício Cumulativo Médio",
     ),
 )
