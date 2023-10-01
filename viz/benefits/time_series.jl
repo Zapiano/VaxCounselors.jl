@@ -3,13 +3,13 @@ using CairoMakie
 using NamedDims
 using LaTeXStrings
 
-function plot_benefits(
+function plot_benefits_series(
     benefits::NamedDimsArray;
-    country=:usa,
-    setup=:default,
-    label_letters=true,
-    lang=:en,
-    cumulative=false,
+    country::Symbol=:usa,
+    setup::Symbol=:default,
+    label_letters::Bool=true,
+    lang::Symbol=:en,
+    cumulative::Bool=false,
 )
     f = Figure()
 

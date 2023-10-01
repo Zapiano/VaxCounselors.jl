@@ -2,7 +2,7 @@ module Viz
 
 include("./theme.jl")
 
-include("./benefits.jl")
+include("./benefits/benefits.jl")
 include("./utilities.jl")
 
 using CSV
