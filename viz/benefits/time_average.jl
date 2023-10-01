@@ -1,5 +1,7 @@
 using AxisKeys
 using CairoMakie
+using Colors
+using ColorSchemes
 using NamedDims
 using LaTeXStrings
 
@@ -32,7 +34,10 @@ function average_benefit_ab_diff(
     category_labels = Array{String}(undef, data_size)
 
     # TODO: Sort out colors by country
-    category_colors = Array{String}(undef, data_size)
+    category_colors = Array{RGB}(undef, data_size)
+    n_countries = length(countries)
+
+    color_palette = ColorSchemes.tab20.colors[1:n_countries]
 
     for (idx_s, strategy) in enumerate(strategies_keys)
         for (idx_c, country) in enumerate(countries)
@@ -42,42 +47,46 @@ function average_benefit_ab_diff(
             B_benefit = _benefits[:, Key(:B), Key(strategy), Key(country)]
             category_data[index] = sum(abs.(A_benefit - B_benefit))
             category_labels[index] = strategies_labels[idx_s]
+            category_colors[index] = color_palette[idx_c]
         end
     end
 
     ax = Axis(f[1, 1])
-    colors = Makie.wong_colors()
+
+    xlabel = if cumulative
+        "Cumulative A-B Difference"
+    else
+        "A-B Difference"
+    end
+
     rainclouds!(
         ax,
         category_labels,
         category_data;
-        xlabel="A-B Difference",
+        xlabel=xlabel,
         clouds=nothing,
         plot_boxplots=false,
         markersize=15,
         jitter_width=0.3,
         side_nudge=0.05,
-        color=colors[indexin(category_labels, unique(category_labels))],
+        color=category_colors,
         orientation=:horizontal,
     )
 
-    #_render_benefits_legend!(f, lang)
+    _render_average_benefits_legend!(f, color_palette, countries, lang)
 
     return f
 end
 
-#function _render_benefits_legend!(f, lang)::Nothing
-#    line_elements = [
-#        LineElement(; color=COLORS.counselors[c], linestyle=nothing) for
-#        c in [:A, :B, :mean]
-#    ]
-#    _labels = LABELS[lang].counselors
-#    Legend(
-#        f[1:end, 3],
-#        line_elements,
-#        [_labels.A, _labels.B, _labels.mean];
-#        framevisible=false,
-#        rowgap=5,
-#    )
-#    return nothing
-#end
+function _render_average_benefits_legend!(
+    f::Figure, colors, countries::Vector{Symbol}, lang::Symbol
+)::Nothing
+    marker_elements = [
+        MarkerElement(; color=colors[i], marker=:circle, markersize=10) for
+        i in eachindex(countries)
+    ]
+
+    _labels = [LABELS[lang].countries[c] for c in countries]
+    Legend(f[1, 2], marker_elements, _labels; framevisible=false, rowgap=5)
+    return nothing
+end

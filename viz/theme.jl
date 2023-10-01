@@ -16,6 +16,20 @@ const LABELS = (
             concentrated="Concentrated",
         ),
         counselors=(A=L"C_A", B=L"C_B", mean="Mean"),
+        countries=(
+            usa="United States",
+            chn="China",
+            bra="Brazil",
+            can="Canada",
+            fra="France",
+            aus="Australia",
+            deu="Germany",
+            jpn="Japan",
+            rus="Russia",
+            irn="Iran",
+            zaf="South Africa",
+            mex="Mexico",
+        ),
     ),
     pt=(
         strategies=(
@@ -32,6 +46,20 @@ const LABELS = (
             concentrated="Concentrado",
         ),
         counselors=(A=L"C_A", B=L"C_B", mean="Média"),
+        countries=(
+            usa="Estados Unidos",
+            chn="China",
+            bra="Brasil",
+            can="Canadá",
+            fra="França",
+            aus="Austrália",
+            deu="Alemanha",
+            jpn="Japão",
+            rus="Rússia",
+            irn="Irã",
+            zaf="África do Sul",
+            mex="México",
+        ),
     ),
 )
 
