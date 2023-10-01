@@ -88,8 +88,20 @@ const COLORS = (
 )
 
 const AXIS = (
-    en=(utility="Utility", benefit="Benefit", timesteps="Time", population="Population"),
+    en=(
+        utility="Utility",
+        benefit="Benefit",
+        timesteps="Time",
+        population="Population",
+        abdiff="A-B Difference",
+        abcumdiff="Cumulative A-B Difference",
+    ),
     pt=(
-        utility="Utilidade", benefit="Benefício", timesteps="Tempo", population="População"
+        utility="Utilidade",
+        benefit="Benefício",
+        timesteps="Tempo",
+        population="População",
+        abdiff="Diferença A-B",
+        abcumdiff="Diferença A-B Cumulativa",
     ),
 )

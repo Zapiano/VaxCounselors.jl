@@ -53,11 +53,7 @@ function average_benefit_ab_diff(
 
     ax = Axis(f[1, 1])
 
-    xlabel = if cumulative
-        "Cumulative A-B Difference"
-    else
-        "A-B Difference"
-    end
+    xlabel = cumulative ? AXIS[lang].abcumdiff : AXIS[lang].abdiff
 
     rainclouds!(
         ax,
