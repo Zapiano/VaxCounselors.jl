@@ -4,12 +4,21 @@ using NamedDims
 using LaTeXStrings
 
 function plot_benefits(
-    benefits::NamedDimsArray; country=:usa, setup=:default, label_letters=true, lang=:en
+    benefits::NamedDimsArray;
+    country=:usa,
+    setup=:default,
+    label_letters=true,
+    lang=:en,
+    cumulative=false,
 )
     f = Figure()
 
     # 3-dimensional NamedDimsArray
-    _benefits = benefits[:, :, :, Key(setup), Key(country)]
+    _benefits = if cumulative
+        cumsum(benefits[:, :, :, Key(setup), Key(country)]; dims=1)
+    else
+        benefits[:, :, :, Key(setup), Key(country)]
+    end
     strategies_keys = sort(Symbol.(get_axiskeys(_benefits, :strategies)))
     sort!(strategies_keys; by=x -> LABELS_LETTERS[:strategies][x])
     strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS[lang].strategies
