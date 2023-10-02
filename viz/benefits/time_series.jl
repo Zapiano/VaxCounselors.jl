@@ -3,7 +3,7 @@ using CairoMakie
 using NamedDims
 using LaTeXStrings
 
-function plot_benefits_series(
+function time_series(
     benefits::NamedDimsArray;
     country::Symbol=:usa,
     setup::Symbol=:default,

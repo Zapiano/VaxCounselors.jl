@@ -3,7 +3,7 @@ using CairoMakie
 using NamedDims
 using LaTeXStrings
 
-function plot_utilities(
+function utility_densities(
     utilities::NamedDimsArray; country=:usa, label_letters=false, lang=:en
 )
     f = Figure()
