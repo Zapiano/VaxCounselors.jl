@@ -5,7 +5,6 @@ using ColorSchemes
 using NamedDims
 using LaTeXStrings
 
-#function average_benefit_mean()
 function average_benefit_ab_diff(
     benefits::NamedDimsArray;
     countries::Vector{Symbol}=[:usa],
