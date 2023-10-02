@@ -49,6 +49,7 @@ function get_benefits(data_folder::String)::NamedDimsArray
             end
         end
     end
+
     return benefits
 end
 
