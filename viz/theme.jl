@@ -65,11 +65,11 @@ const LABELS = (
 
 const LABELS_LETTERS = (
     strategies=(
-        envy_free="(d)",
-        maximize_benefit="(b)",
-        minimize_benefit="(e)",
-        oldest_first="(c)",
         random_vaccination="(a)",
+        maximize_benefit="(b)",
+        oldest_first="(c)",
+        envy_free="(d)",
+        minimize_benefit="(e)",
     ),
     setups=(
         default="(a)", transmissibility="(b)", symptomatology="(c)", concentrated="(d)"
