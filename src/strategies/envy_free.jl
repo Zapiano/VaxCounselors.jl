@@ -27,7 +27,7 @@ function run_envy_free(
             ef_point::EFPoint = SimplexTools.EFPoint(simplex, utility_A, utility_B)
             vaccinated_intervals = ef_point.vaccinationIntervals
 
-            #TODO plot_iterative(utility_A, utility_B, ef_point, iteration)
+            #TODO iterative_plot(utility_A, utility_B, ef_point, iteration)
         end
 
         UtilityFunction.update_utility!(utility_A, vaccinated_intervals)
@@ -37,7 +37,9 @@ function run_envy_free(
         iteration += 1
     end
 
-    #TODO writeVaccinatedPopulationCSV
+    VaxCounselors.write_vaccinated_population_CSV(
+        utility_A.vaccinated_population, :envy_free, timestamp, country, setup
+    )
 
     VaxCounselors.write_benefits_CSV(
         utility_A.benefits, utility_B.benefits, :envy_free, timestamp, country, setup

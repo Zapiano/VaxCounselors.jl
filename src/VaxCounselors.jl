@@ -49,7 +49,6 @@ function run_model(countries::Vector{String}, setups::Vector{Symbol})::Nothing
 
     @showprogress pmap(_run_strategies, timestamp_params, countries_params, setups_params)
 
-    #TODO write utilities csv
     return nothing
 end
 function run_model(setups::Vector{Symbol})::Nothing
