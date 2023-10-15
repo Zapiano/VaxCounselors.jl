@@ -62,8 +62,8 @@ function write_vaccinated_population_CSV(
     col_names = [:ag0_14, :ag15_24, :ag25_64, :ag_65]
     vax_pop = DataFrame(_vax_pop, col_names)
 
-    out_path = _output_data_path(timestamp, country, setup)
-    csv_path = "$(out_path)/vaccinated_population__$(strategy).csv"
+    out_data_path = _output_data_path(timestamp, country, setup)
+    csv_path = "$(out_data_path)/vaccinated_population__$(strategy).csv"
 
     CSV.write(csv_path, vax_pop; header=true)
 
@@ -84,9 +84,9 @@ function write_benefits_CSV(
     rescaledBenefits = DataFrame(; A=rescaledBenefitsA, B=rescaledBenefitsB)
 
     # Export benefits to csv
-    outDataPath = _output_data_path(timestamp, country, setup)
-    csvPath = "$(outDataPath)/benefit__$(strategy).csv"
-    CSV.write(csvPath, rescaledBenefits; header=true)
+    out_data_path = _output_data_path(timestamp, country, setup)
+    csv_path = "$(out_data_path)/benefit__$(strategy).csv"
+    CSV.write(csv_path, rescaledBenefits; header=true)
 
     return nothing
 end
