@@ -22,8 +22,7 @@ function time_avg_ab_diff(
         benefits[:, :, :, Key(setup), :]
     end
 
-    strategies_keys = sort(Symbol.(get_axiskeys(_benefits, :strategies)))
-    sort!(strategies_keys; by=x -> LABELS_LETTERS[:strategies][x])
+    strategies_keys = reverse(STRATEGY_KEYS.time_average)
     strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS[lang].strategies
 
     #    y_low, y_high = get_y_limits(_benefits)
@@ -45,7 +44,7 @@ function time_avg_ab_diff(
             A_benefit = _benefits[:, Key(:A), Key(strategy), Key(country)]
             B_benefit = _benefits[:, Key(:B), Key(strategy), Key(country)]
             category_data[index] = sum(abs.(A_benefit - B_benefit))
-            category_labels[index] = strategies_labels[idx_s]
+            category_labels[index] = strategies_labels[strategy]
             category_colors[index] = color_palette[idx_c]
         end
     end
@@ -85,12 +84,9 @@ function time_avg_cum_mean(
     # 3-dimensional NamedDimsArray
     _benefits = benefits[:, :, :, Key(setup), :]
 
-    strategies_keys = sort(Symbol.(get_axiskeys(_benefits, :strategies)))
-    sort!(strategies_keys; by=x -> LABELS_LETTERS[:strategies][x])
+    strategies_keys = reverse(STRATEGY_KEYS.time_average)
     strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS[lang].strategies
 
-    #    y_low, y_high = get_y_limits(_benefits)
-    #    n_cols, n_rows = get_cols_rows(n_figures)
     data_size = length(countries) * length(strategies_keys)
     category_data = zeros(data_size)
     category_labels = Array{String}(undef, data_size)
@@ -107,7 +103,7 @@ function time_avg_cum_mean(
             A_benefit = cumsum(_benefits[:, Key(:A), Key(strategy), Key(country)])
             B_benefit = cumsum(_benefits[:, Key(:B), Key(strategy), Key(country)])
             category_data[index] = sum((A_benefit + B_benefit) / 2) / size(_benefits, 1)
-            category_labels[index] = strategies_labels[idx_s]
+            category_labels[index] = strategies_labels[strategy]
             category_colors[index] = color_palette[idx_c]
         end
     end

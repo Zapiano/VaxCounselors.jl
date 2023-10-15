@@ -107,3 +107,9 @@ const AXIS = (
         cum_mean_benefit="Benefício Cumulativo Médio",
     ),
 )
+
+const STRATEGY_KEYS = (
+    time_average=[
+        :random_vaccination, :maximize_benefit, :minimize_benefit, :oldest_first, :envy_free
+    ],
+)
