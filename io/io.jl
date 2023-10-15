@@ -49,16 +49,20 @@ function write_utility_density_CSV(
 end
 
 function write_vaccinated_population_CSV(
-    vaccinated_population, strategy::Symbol, timestamp, country, utility
+    vaccinated_population::Vector{Vector{Float64}},
+    strategy::Symbol,
+    timestamp::Int64,
+    country::String,
+    setup::Symbol,
 )::Nothing
-    timesteps = length(vaccinated_population)
+    n_timesteps = length(vaccinated_population)
     n_age_groups = length(vaccinated_population[1])
 
-    _vax_pop = reshape(vcat(vaccinated_population...), n_age_groups, timesteps)'
+    _vax_pop = reshape(vcat(vaccinated_population...), n_age_groups, n_timesteps)'
     col_names = [:ag0_14, :ag15_24, :ag25_64, :ag_65]
     vax_pop = DataFrame(_vax_pop, col_names)
 
-    out_path = _output_data_path(timestamp, country, utility)
+    out_path = _output_data_path(timestamp, country, setup)
     csv_path = "$(out_path)/vaccinated_population__$(strategy).csv"
 
     CSV.write(csv_path, vax_pop; header=true)

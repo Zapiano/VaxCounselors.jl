@@ -6,19 +6,25 @@ using VaxCounselors: COUNTRIES, SETUPS, DEMOGRAPHICLABELS
 include("smooth_steps.jl")
 include("mini_max_intervals.jl")
 
-export Utility,
-    build_utilities,
-    update_utility!,
-    #_update_vaccinated_population!,
-    average_utility,
-    integrate_utility
+export Utility, build_utilities, update_utility!, average_utility, integrate_utility
 
 mutable struct Utility
     steps::Vector{Dict}
     benefits::Vector{Float64}
     scale_factor::Float64
     normalization_factor::Float64
-    vaccinated_population::Array{Array{Float64}} # frac of each age group vaccinated per step
+    vaccinated_population::Vector{Vector{Float64}}
+end
+
+function Utility(steps::Vector{Dict})
+    benefits::Vector{Float64} = []
+    scale_factor::Float64 = 1
+    normalization_factor::Float64 = 1
+    vaccinated_population::Vector{Vector{Float64}} = []
+
+    return Utility(
+        steps, benefits, scale_factor, normalization_factor, vaccinated_population
+    )
 end
 
 function labels(utility::Utility)::Array{AbstractString}
@@ -29,8 +35,8 @@ function build_utilities(country::String, setup::Symbol)
     steps_A::Vector{Dict} = _build_utility_steps(country, setup, :A)
     steps_B::Vector{Dict} = _build_utility_steps(country, setup, :B)
 
-    utility_A = Utility(steps_A, [], 1, 1, [])
-    utility_B = Utility(steps_B, [], 1, 1, [])
+    utility_A = Utility(steps_A)
+    utility_B = Utility(steps_B)
 
     _update_normalization_factor!(utility_A)
     _update_normalization_factor!(utility_B)
