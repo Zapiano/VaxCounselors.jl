@@ -85,6 +85,7 @@ const COLORS = (
         oldest_first=:brown,
         random_vaccination=:orange,
     ),
+    age_groups=(ag0_14=:red, ag15_24=:pink, ag25_64=:blue, ag_65=:yellow),
 )
 
 const AXIS = (
@@ -93,6 +94,7 @@ const AXIS = (
         benefit="Benefit",
         timesteps="Time",
         population="Population",
+        population_frac="Population Fraction",
         abdiff="A-B Difference",
         abcumdiff="Cumulative A-B Difference",
         cum_mean_benefit="Cumulative Mean Benefit",
@@ -102,6 +104,7 @@ const AXIS = (
         benefit="Benefício",
         timesteps="Tempo",
         population="População",
+        population_frac="Fração da População",
         abdiff="Diferença A-B",
         abcumdiff="Diferença A-B Cumulativa",
         cum_mean_benefit="Benefício Cumulativo Médio",
