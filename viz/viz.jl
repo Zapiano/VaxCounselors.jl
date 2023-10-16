@@ -4,6 +4,7 @@ include("./theme.jl")
 
 include("./benefits/benefits.jl")
 include("./utilities.jl")
+include("vaccinated_population.jl")
 
 using CSV
 using NamedDims

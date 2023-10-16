@@ -30,6 +30,12 @@ const LABELS = (
             zaf="South Africa",
             mex="Mexico",
         ),
+        age_groups=(
+            ag0_14="0 - 14 y.o.",
+            ag15_24="15 - 25 y.o.",
+            ag25_64="25 - 64 y.o.",
+            ag_65="+65 y.o.",
+        ),
     ),
     pt=(
         strategies=(
@@ -60,6 +66,12 @@ const LABELS = (
             zaf="África do Sul",
             mex="México",
         ),
+        age_groups=(
+            ag0_14="0 - 14 anos",
+            ag15_24="15 - 25 anos",
+            ag25_64="25 - 64 anos",
+            ag_65="+65 anos",
+        ),
     ),
 )
 
@@ -85,6 +97,7 @@ const COLORS = (
         oldest_first=:brown,
         random_vaccination=:orange,
     ),
+    age_groups=(ag0_14=:blue, ag15_24=:orange, ag25_64=:green, ag_65=:red),
 )
 
 const AXIS = (
@@ -93,6 +106,7 @@ const AXIS = (
         benefit="Benefit",
         timesteps="Time",
         population="Population",
+        population_frac="Population Fraction",
         abdiff="A-B Difference",
         abcumdiff="Cumulative A-B Difference",
         cum_mean_benefit="Cumulative Mean Benefit",
@@ -102,6 +116,7 @@ const AXIS = (
         benefit="Benefício",
         timesteps="Tempo",
         population="População",
+        population_frac="Fração da População",
         abdiff="Diferença A-B",
         abcumdiff="Diferença A-B Cumulativa",
         cum_mean_benefit="Benefício Cumulativo Médio",
