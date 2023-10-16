@@ -60,6 +60,7 @@ function vaccinated_population(
     setup_labels = label_letters ? LABELS_LETTERS.setups : LABELS[lang].setups
 
     y_low, y_high = get_y_limits(vax_pop)
+    n_timesteps = size(vax_pop, 1)
 
     n_figures = length(setup_keys)
     n_cols, n_rows = get_cols_rows(n_figures)
@@ -75,7 +76,12 @@ function vaccinated_population(
                 title=subtitle,
                 xlabel=AXIS[lang].timesteps,
                 ylabel=AXIS[lang].population_frac,
-                #yticks=([0, 0.25, 0.5, 0.75, 1], ["0%", "25%", "50%", "75%", "100%"]),
+                yticks=(
+                    range(y_low, y_high; length=5), ["0%", "25%", "50%", "75%", "100%"]
+                ),
+                xticks=(
+                    range(0, n_timesteps; length=6), ["0", "20", "40", "60", "80", "100"]
+                ),
                 limits=(nothing, (y_low, y_high)),
             )
             colors = collect(values(COLORS.age_groups))
@@ -83,23 +89,15 @@ function vaccinated_population(
         end
     end
 
-    #_render_vax_pop_legend!(f, lang)
+    _render_vax_pop_legend!(f, lang)
 
     return f
 end
 
-#function _render_vax_pop_legend!(f, lang)::Nothing
-#    line_elements = [
-#        LineElement(; color=COLORS.counselors[c], linestyle=nothing) for
-#        c in [:A, :B, :mean]
-#    ]
-#    _labels = LABELS[lang].counselors
-#    Legend(
-#        f[1:end, 3],
-#        line_elements,
-#        [_labels.A, _labels.B, _labels.mean];
-#        framevisible=false,
-#        rowgap=5,
-#    )
-#    return nothing
-#end
+function _render_vax_pop_legend!(f, lang)::Nothing
+    line_elements = [LineElement(; color=c) for c in values(COLORS.age_groups)]
+    _labels = collect(values(LABELS[lang].age_groups))
+    #Main.@infiltrate
+    Legend(f[1:end, 3], line_elements, _labels; framevisible=false, rowgap=5)
+    return nothing
+end
