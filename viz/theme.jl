@@ -1,5 +1,3 @@
-using LaTeXStrings
-
 const LABELS = (
     en=(
         strategies=(

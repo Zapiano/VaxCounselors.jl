@@ -1,14 +1,18 @@
 module Viz
 
+using AxisKeys
+using CairoMakie
+using Colors
+using ColorSchemes
+using LaTeXStrings
+using NamedDims
+
 include("./theme.jl")
 
-include("./benefits/benefits.jl")
+include("./benefits/time_average.jl")
+include("./benefits/time_series.jl")
 include("./utilities.jl")
 include("vaccinated_population.jl")
-
-using CSV
-using NamedDims
-using AxisKeys
 
 function get_axiskeys(data::NamedDimsArray, dimname::Symbol)
     return axiskeys(data)[findall(x -> x == dimname, dimnames(data))][1]

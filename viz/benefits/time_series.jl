@@ -1,8 +1,3 @@
-using AxisKeys
-using CairoMakie
-using NamedDims
-using LaTeXStrings
-
 function time_series(
     benefits::NamedDimsArray;
     country::Symbol=:usa,

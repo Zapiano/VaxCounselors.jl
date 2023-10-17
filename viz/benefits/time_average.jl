@@ -1,12 +1,29 @@
-using AxisKeys
-using CairoMakie
-using Colors
-using ColorSchemes
-using NamedDims
-using LaTeXStrings
+"""
+    avg_benefit_ab_diff(
+        avg_benefit_ab_diff::NamedDimsArray;
+        countries::Vector{Symbol}=[:usa],
+        setup::Symbol=:default,
+        label_letters::Bool=false,
+        lang::Symbol=:en,
+        cumulative::Bool=false,
+    )
 
-function time_avg_ab_diff(
-    benefits::NamedDimsArray;
+Plots time average A-B benefit difference
+
+# Arguments
+- `avg_benefit_ab_diff` : Time average A-B benefit difference for each strategy, setup and
+country;
+- `countries` : Countries to plot
+- `setup` : Setups to plot
+- `label_letters` : Boolean to plot strategy as letters (true) or words (false). Defaults
+to false
+- `lang` : Language in which to plot. Defaults to english
+- `cumulative` : If true, plot cumulative sum. If false, plot non-cumulative sum. Defaults
+to false
+
+"""
+function avg_benefit_ab_diff(
+    avg_benefit_ab_diff::NamedDimsArray;
     countries::Vector{Symbol}=[:usa],
     setup::Symbol=:default,
     label_letters::Bool=false,
@@ -15,18 +32,9 @@ function time_avg_ab_diff(
 )
     f = Figure()
 
-    # 3-dimensional NamedDimsArray
-    _benefits = if cumulative
-        cumsum(benefits[:, :, :, Key(setup), :]; dims=1)
-    else
-        benefits[:, :, :, Key(setup), :]
-    end
-
     strategies_keys = reverse(STRATEGY_KEYS.time_average)
     strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS[lang].strategies
 
-    #    y_low, y_high = get_y_limits(_benefits)
-    #    n_cols, n_rows = get_cols_rows(n_figures)
     data_size = length(countries) * length(strategies_keys)
     category_data = zeros(data_size)
     category_labels = Array{String}(undef, data_size)
@@ -40,10 +48,10 @@ function time_avg_ab_diff(
     for (idx_s, strategy) in enumerate(strategies_keys)
         for (idx_c, country) in enumerate(countries)
             index = idx_c + length(countries) * (idx_s - 1)
-
-            A_benefit = _benefits[:, Key(:A), Key(strategy), Key(country)]
-            B_benefit = _benefits[:, Key(:B), Key(strategy), Key(country)]
-            category_data[index] = sum(abs.(A_benefit - B_benefit))
+            #Main.@infiltrate
+            category_data[index] = avg_benefit_ab_diff[
+                Key(strategy), Key(setup), Key(country)
+            ]
             category_labels[index] = strategies_labels[strategy]
             category_colors[index] = color_palette[idx_c]
         end
@@ -72,17 +80,14 @@ function time_avg_ab_diff(
     return f
 end
 
-function time_avg_cum_mean(
-    benefits::NamedDimsArray;
+function avg_cum_mean_benefit(
+    avg_cum_mean_benefit::NamedDimsArray;
     countries::Vector{Symbol}=[:usa],
     setup::Symbol=:default,
     label_letters::Bool=false,
     lang::Symbol=:en,
 )
     f = Figure()
-
-    # 3-dimensional NamedDimsArray
-    _benefits = benefits[:, :, :, Key(setup), :]
 
     strategies_keys = reverse(STRATEGY_KEYS.time_average)
     strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS[lang].strategies
@@ -100,9 +105,9 @@ function time_avg_cum_mean(
         for (idx_c, country) in enumerate(countries)
             index = idx_c + length(countries) * (idx_s - 1)
 
-            A_benefit = cumsum(_benefits[:, Key(:A), Key(strategy), Key(country)])
-            B_benefit = cumsum(_benefits[:, Key(:B), Key(strategy), Key(country)])
-            category_data[index] = sum((A_benefit + B_benefit) / 2) / size(_benefits, 1)
+            category_data[index] = avg_cum_mean_benefit[
+                Key(strategy), Key(setup), Key(country)
+            ]
             category_labels[index] = strategies_labels[strategy]
             category_colors[index] = color_palette[idx_c]
         end
