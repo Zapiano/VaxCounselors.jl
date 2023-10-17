@@ -8,14 +8,15 @@ include("../dict/countries.jl")
 include("../dict/setups.jl")
 include("../dict/demographicLabels.jl")
 
-include("utility_function/utility_function.jl")
+include("./utility_function/utility_function.jl")
 
 include("../io/io.jl")
 
 include("../viz/viz.jl")
+include("../metrics/metrics.jl")
 
-include("simplex_tools.jl")
-include("strategies/strategies.jl")
+include("./simplex_tools/simplex_tools.jl")
+include("./strategies/strategies.jl")
 
 export run_model
 
