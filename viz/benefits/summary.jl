@@ -4,30 +4,51 @@ function summary(benefits::NamedDimsArray; lang=:en, fig_opts::Dict=Dict())::Fig
     resolution = get(fig_opts, :resolution, (750, 1400))
     f = Figure(; resolution=resolution)
 
-    ab_diff = VaxCounselors.Metrics.avg_benefit_ab_diff(benefits)
+    ncum_ab_diff = VaxCounselors.Metrics.avg_benefit_ab_diff(benefits)
     cum_ab_diff = VaxCounselors.Metrics.avg_benefit_ab_diff(benefits; cumulative=true)
     cum_mean_benefit = VaxCounselors.Metrics.avg_cum_mean_benefit(benefits)
 
-    setups = axiskeys(benefits)[dim(benefits, :setups)]
+    delta_y = 0.1
+    y_low_c = minimum(cum_ab_diff) * (1 - delta_y)
+    y_high_c = maximum(cum_ab_diff) * (1 + delta_y)
+    y_low_nc = minimum(ncum_ab_diff) * (1 - delta_y)
+    y_high_nc = maximum(ncum_ab_diff) * (1 + delta_y)
+
+    delta_x = 0.1
+    x_low = minimum(cum_mean_benefit) * (1 - delta_x)
+    x_high = maximum(cum_mean_benefit) * (1 + delta_x)
+
+    setups = copy(axiskeys(benefits)[dim(benefits, :setups)])
+    sort!(setups; by=x -> LABELS_LETTERS.setups[x])
 
     for (idx_s, setup) in enumerate(setups)
         g_nc = f[idx_s, 1] = GridLayout()  # Non-cumulative plot grid
         g_c = f[idx_s, 2] = GridLayout() # Cumulative plot grid
 
-        abd = ab_diff[:, idx_s, :]
-        cabd = cum_ab_diff[:, idx_s, :]
-        cmb = cum_mean_benefit[:, idx_s, :]
+        ncabd = ncum_ab_diff[:, Key(setup), :]
+        cabd = cum_ab_diff[:, Key(setup), :]
+        cmb = cum_mean_benefit[:, Key(setup), :]
 
-        axis_opts_nc = Dict(
-            :ylabel => AXIS[lang].abcumdiff,
-            :xlabel => AXIS[lang].cum_mean_benefit,
-            :label => LABELS[lang].setups[setup],
-        )
         axis_opts_c = Dict(
-            :ylabel => AXIS[lang].abdiff, :xlabel => AXIS[lang].cum_mean_benefit
+            :ylabel => AXIS[lang].abcumdiff,
+            :ylow => y_low_c,
+            :yhigh => y_high_c,
+            :xlabel => AXIS[lang].cum_mean_benefit,
+            :xlow => x_low,
+            :xhigh => x_high,
         )
-        VaxCounselors.Viz.jointplot(g_nc, cmb, cabd; axis_opts=axis_opts_nc)
-        VaxCounselors.Viz.jointplot(g_c, cmb, abd; axis_opts=axis_opts_c)
+        axis_opts_nc = Dict(
+            :ylabel => AXIS[lang].abdiff,
+            :ylow => y_low_nc,
+            :yhigh => y_high_nc,
+            :label => LABELS[lang].setups[setup],
+            :xlabel => AXIS[lang].cum_mean_benefit,
+            :xlow => x_low,
+            :xhigh => x_high,
+        )
+
+        VaxCounselors.Viz.jointplot(g_c, cmb, cabd; axis_opts=axis_opts_c)
+        VaxCounselors.Viz.jointplot(g_nc, cmb, ncabd; axis_opts=axis_opts_nc)
     end
 
     f
@@ -47,7 +68,13 @@ function jointplot(
     ylabel = get(axis_opts, :ylabel, "")
 
     ax_top = Axis(g[1, 1]; height=density_size)
-    ax_main = Axis(g[2, 1]; xlabel=xlabel, ylabel=ylabel)
+    xlow = get(axis_opts, :xlow, minimum(top_data))
+    xhigh = get(axis_opts, :xhigh, maximum(top_data))
+    ylow = get(axis_opts, :ylow, minimum(right_data))
+    yhigh = get(axis_opts, :yhigh, maximum(right_data))
+    ax_main = Axis(
+        g[2, 1]; xlabel=xlabel, ylabel=ylabel, limits=((xlow, xhigh), (ylow, yhigh))
+    )
     ax_right = Axis(g[2, 2]; width=density_size)
 
     linkyaxes!(ax_main, ax_right)
@@ -58,9 +85,16 @@ function jointplot(
     for strategy in strategies
         x_data = top_data[Key(strategy), :]
         y_data = right_data[Key(strategy), :]
-        scatter!(ax_main, x_data, y_data; markersize=4, label=strategy)
-        density!(ax_top, x_data)
-        density!(ax_right, y_data; direction=:y)
+        scatter!(
+            ax_main,
+            x_data,
+            y_data;
+            markersize=4,
+            label=strategy,
+            color=COLORS.strategies[strategy],
+        )
+        density!(ax_top, x_data; color=COLORS.strategies[strategy])
+        density!(ax_right, y_data; direction=:y, color=COLORS.strategies[strategy])
     end
 
     ylims!(ax_top; low=0)
