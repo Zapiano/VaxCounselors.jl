@@ -115,7 +115,8 @@ function jointplot(
             valign=:center,
             rotation=π / 2,
             font=:bold,
-            padding=(0, 70, 0, 0),
+            padding=(0, 85, 0, 0),
+            fontsize=20,
         )
     end
 
