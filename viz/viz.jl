@@ -9,6 +9,7 @@ using NamedDims
 
 include("./theme.jl")
 
+include("./benefits/summary.jl")
 include("./benefits/time_average.jl")
 include("./benefits/time_series.jl")
 include("./utilities.jl")
