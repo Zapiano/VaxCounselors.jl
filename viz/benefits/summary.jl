@@ -9,14 +9,14 @@ function summary(benefits::NamedDimsArray; lang=:en, fig_opts::Dict=Dict())::Fig
     cum_mean_benefit = VaxCounselors.Metrics.avg_cum_mean_benefit(benefits)
 
     delta_y = 0.1
-    y_low_c = minimum(cum_ab_diff) * (1 - delta_y)
-    y_high_c = maximum(cum_ab_diff) * (1 + delta_y)
-    y_low_nc = minimum(ncum_ab_diff) * (1 - delta_y)
-    y_high_nc = maximum(ncum_ab_diff) * (1 + delta_y)
+    y_low_c = max(minimum(cum_ab_diff) - delta_y * minimum(cum_ab_diff), 0)
+    y_high_c = maximum(cum_ab_diff) + delta_y * maximum(cum_ab_diff)
+    y_low_nc = max(minimum(ncum_ab_diff) - delta_y * minimum(cum_ab_diff), 0)
+    y_high_nc = maximum(ncum_ab_diff) + delta_y * maximum(ncum_ab_diff)
 
     delta_x = 0.1
-    x_low = minimum(cum_mean_benefit) * (1 - delta_x)
-    x_high = maximum(cum_mean_benefit) * (1 + delta_x)
+    x_low = max(minimum(cum_mean_benefit) - delta_x * minimum(cum_mean_benefit), 0)
+    x_high = maximum(cum_mean_benefit) + delta_x * maximum(cum_mean_benefit)
 
     setups = copy(axiskeys(benefits)[dim(benefits, :setups)])
     sort!(setups; by=x -> LABELS_LETTERS.setups[x])
@@ -94,7 +94,7 @@ function jointplot(
         g[2, 1];
         xlabel=xlabel,
         ylabel=ylabel,
-        limits=((xlow, xhigh), (ylow, yhigh)),
+        limits=(xlow, xhigh, ylow, yhigh),
         backgroundcolor=bg_color,
         xgridcolor=grid_color,
         xgridwidth=grid_width,
