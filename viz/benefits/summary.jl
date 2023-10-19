@@ -68,15 +68,55 @@ function jointplot(
     xlabel = get(axis_opts, :xlabel, "")
     ylabel = get(axis_opts, :ylabel, "")
 
-    ax_top = Axis(g[1, 1]; height=density_size)
     xlow = get(axis_opts, :xlow, minimum(top_data))
     xhigh = get(axis_opts, :xhigh, maximum(top_data))
     ylow = get(axis_opts, :ylow, minimum(right_data))
     yhigh = get(axis_opts, :yhigh, maximum(right_data))
-    ax_main = Axis(
-        g[2, 1]; xlabel=xlabel, ylabel=ylabel, limits=((xlow, xhigh), (ylow, yhigh))
+
+    theme = get(axis_opts, :theme, :darkgrid)
+    bg_color = THEME[theme].backgroundcolor
+    grid_color = THEME[theme].gridcolor
+    grid_width = THEME[theme].gridwidth
+
+    ax_top = Axis(
+        g[1, 1];
+        height=density_size,
+        backgroundcolor=bg_color,
+        xgridcolor=grid_color,
+        xgridwidth=grid_width,
+        ygridvisible=false,
+        rightspinevisible=false,
+        leftspinevisible=false,
+        topspinevisible=false,
+        bottomspinevisible=false,
     )
-    ax_right = Axis(g[2, 2]; width=density_size)
+    ax_main = Axis(
+        g[2, 1];
+        xlabel=xlabel,
+        ylabel=ylabel,
+        limits=((xlow, xhigh), (ylow, yhigh)),
+        backgroundcolor=bg_color,
+        xgridcolor=grid_color,
+        xgridwidth=grid_width,
+        ygridcolor=grid_color,
+        ygridwidth=grid_width,
+        rightspinevisible=false,
+        leftspinevisible=false,
+        topspinevisible=false,
+        bottomspinevisible=false,
+    )
+    ax_right = Axis(
+        g[2, 2];
+        width=density_size,
+        backgroundcolor=bg_color,
+        ygridcolor=grid_color,
+        ygridwidth=grid_width,
+        xgridvisible=false,
+        rightspinevisible=false,
+        leftspinevisible=false,
+        topspinevisible=false,
+        bottomspinevisible=false,
+    )
 
     linkyaxes!(ax_main, ax_right)
     linkxaxes!(ax_main, ax_top)
@@ -86,16 +126,36 @@ function jointplot(
     for strategy in strategies
         x_data = top_data[Key(strategy), :]
         y_data = right_data[Key(strategy), :]
+        color = COLORS.strategies[strategy]
+        alpha = 0.4
+        density_stroke_width = 1.5
         scatter!(
             ax_main,
             x_data,
             y_data;
-            markersize=4,
+            markersize=5,
             label=strategy,
-            color=COLORS.strategies[strategy],
+            color=color,
+            strokewidth=0.5,
+            strokecolor=:white,
         )
-        density!(ax_top, x_data; color=COLORS.strategies[strategy])
-        density!(ax_right, y_data; direction=:y, color=COLORS.strategies[strategy])
+        density!(
+            ax_top,
+            x_data;
+            color=(color, alpha),
+            strokecolor=color,
+            strokearound=true,
+            strokewidth=density_stroke_width,
+        )
+        density!(
+            ax_right,
+            y_data;
+            direction=:y,
+            color=(color, alpha),
+            strokecolor=color,
+            strokearound=true,
+            strokewidth=density_stroke_width,
+        )
     end
 
     ylims!(ax_top; low=0)

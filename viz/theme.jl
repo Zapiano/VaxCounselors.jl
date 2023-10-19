@@ -98,6 +98,8 @@ const COLORS = (
     age_groups=(ag0_14=:blue, ag15_24=:orange, ag25_64=:green, ag_65=:red),
 )
 
+THEME = (darkgrid=(backgroundcolor="#eaeaf2", gridcolor="#fafafc", gridwidth=3),)
+
 const AXIS = (
     en=(
         utility="Utility",
