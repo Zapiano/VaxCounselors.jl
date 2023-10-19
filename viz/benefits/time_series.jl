@@ -5,6 +5,7 @@ function time_series(
     label_letters::Bool=true,
     lang::Symbol=:en,
     cumulative::Bool=false,
+    axis_opts::Dict=Dict(),
 )
     f = Figure()
 
@@ -29,8 +30,22 @@ function time_series(
         if index <= n_figures
             strategy = strategies_keys[index]
             subtitle = strategies_labels[strategy]
+
+            theme = get(axis_opts, :theme, :darkgrid)
+            bg_color = THEME[theme].backgroundcolor
+            grid_color = THEME[theme].gridcolor
+            grid_width = THEME[theme].gridwidth
             ax = Axis(
                 f[row, col];
+                backgroundcolor=bg_color,
+                xgridcolor=grid_color,
+                xgridwidth=grid_width,
+                ygridcolor=grid_color,
+                ygridwidth=grid_width,
+                rightspinevisible=false,
+                leftspinevisible=false,
+                topspinevisible=false,
+                bottomspinevisible=false,
                 title=subtitle,
                 xlabel=AXIS[lang].timesteps,
                 ylabel=AXIS[lang].benefit,
