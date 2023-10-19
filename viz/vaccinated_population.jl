@@ -1,5 +1,9 @@
 function vaccinated_population(
-    vaccinated_population::NamedDimsArray; country=:usa, label_letters=false, lang=:en
+    vaccinated_population::NamedDimsArray;
+    country=:usa,
+    label_letters=false,
+    lang=:en,
+    axis_opts::Dict=Dict(),
 )
     f = Figure()
 
@@ -22,8 +26,22 @@ function vaccinated_population(
         if index <= n_figures
             setup = setup_keys[index]
             subtitle = setup_labels[setup]
+            theme = get(axis_opts, :theme, :darkgrid)
+            bg_color = THEME[theme].backgroundcolor
+            grid_color = THEME[theme].gridcolor
+            grid_width = THEME[theme].gridwidth
+
             Axis(
                 f[row, col];
+                backgroundcolor=bg_color,
+                xgridcolor=grid_color,
+                xgridwidth=grid_width,
+                ygridcolor=grid_color,
+                ygridwidth=grid_width,
+                rightspinevisible=false,
+                leftspinevisible=false,
+                topspinevisible=false,
+                bottomspinevisible=false,
                 title=subtitle,
                 xlabel=AXIS[lang].timesteps,
                 ylabel=AXIS[lang].population_frac,
