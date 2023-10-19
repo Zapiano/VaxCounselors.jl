@@ -29,6 +29,7 @@ function avg_benefit_ab_diff(
     label_letters::Bool=false,
     lang::Symbol=:en,
     cumulative::Bool=false,
+    axis_opts::Dict=Dict(),
 )
     f = Figure()
 
@@ -57,7 +58,22 @@ function avg_benefit_ab_diff(
         end
     end
 
-    ax = Axis(f[1, 1])
+    theme = get(axis_opts, :theme, :darkgrid)
+    bg_color = THEME[theme].backgroundcolor
+    grid_color = THEME[theme].gridcolor
+    grid_width = THEME[theme].gridwidth
+    ax = Axis(
+        f[1, 1];
+        backgroundcolor=bg_color,
+        xgridcolor=grid_color,
+        xgridwidth=grid_width,
+        ygridcolor=grid_color,
+        ygridwidth=grid_width,
+        rightspinevisible=false,
+        leftspinevisible=false,
+        topspinevisible=false,
+        bottomspinevisible=false,
+    )
 
     xlabel = cumulative ? AXIS[lang].abcumdiff : AXIS[lang].abdiff
 
@@ -86,6 +102,7 @@ function avg_cum_mean_benefit(
     setup::Symbol=:default,
     label_letters::Bool=false,
     lang::Symbol=:en,
+    axis_opts::Dict=Dict(),
 )
     f = Figure()
 
@@ -113,7 +130,22 @@ function avg_cum_mean_benefit(
         end
     end
 
-    ax = Axis(f[1, 1])
+    theme = get(axis_opts, :theme, :darkgrid)
+    bg_color = THEME[theme].backgroundcolor
+    grid_color = THEME[theme].gridcolor
+    grid_width = THEME[theme].gridwidth
+    ax = Axis(
+        f[1, 1];
+        backgroundcolor=bg_color,
+        xgridcolor=grid_color,
+        xgridwidth=grid_width,
+        ygridcolor=grid_color,
+        ygridwidth=grid_width,
+        rightspinevisible=false,
+        leftspinevisible=false,
+        topspinevisible=false,
+        bottomspinevisible=false,
+    )
 
     xlabel = AXIS[lang].cum_mean_benefit
 
