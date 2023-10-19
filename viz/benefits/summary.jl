@@ -1,7 +1,7 @@
 using VaxCounselors
 
 function summary(benefits::NamedDimsArray; lang=:en, fig_opts::Dict=Dict())::Figure
-    resolution = get(fig_opts, :resolution, (750, 1400))
+    resolution = get(fig_opts, :resolution, (850, 1400))
     f = Figure(; resolution=resolution)
 
     ncum_ab_diff = VaxCounselors.Metrics.avg_benefit_ab_diff(benefits)
@@ -51,7 +51,8 @@ function summary(benefits::NamedDimsArray; lang=:en, fig_opts::Dict=Dict())::Fig
         VaxCounselors.Viz.jointplot(g_nc, cmb, ncabd; axis_opts=axis_opts_nc)
     end
 
-    f
+    strategies = axiskeys(benefits)[dim(benefits, :strategies)]
+    _render_summary_legend!(f, strategies, lang)
 
     return f
 end
@@ -120,5 +121,24 @@ function jointplot(
         )
     end
 
+    return nothing
+end
+
+function _render_summary_legend!(f, strategies, lang)::Nothing
+    line_elements = [
+        MarkerElement(; color=COLORS.strategies[s], marker=:circle, linestyle=nothing) for
+        s in strategies
+    ]
+    _labels = [LABELS[lang].strategies[s] for s in strategies]
+
+    Legend(
+        f[end + 1, 1:end],
+        line_elements,
+        _labels;
+        orientation=:horizontal,
+        framevisible=false,
+        halign=:right,
+        padding=(0, 30, 0, 0),
+    )
     return nothing
 end
