@@ -14,7 +14,8 @@ function utility_densities(
     setup_labels = label_letters ? LABELS_LETTERS.setups : LABELS[lang].setups
 
     y_low, y_high = get_y_limits(_utilities)
-
+    n_population = size(_utilities, 1)
+    xticks = (range(1, n_population; length=6), ["0", "0.2", "0.4", "0.6", "0.8", "1"])
     n_figures = length(setup_keys)
     n_cols, n_rows = get_cols_rows(n_figures)
 
@@ -40,6 +41,7 @@ function utility_densities(
                 leftspinevisible=false,
                 topspinevisible=false,
                 bottomspinevisible=false,
+                xticks=xticks,
                 title=subtitle,
                 xlabel=AXIS[lang].population,
                 ylabel=AXIS[lang].utility,
