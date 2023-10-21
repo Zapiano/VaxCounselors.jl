@@ -88,7 +88,7 @@ end
 
 function _render_utilities_legend!(f, lang)::Nothing
     line_elements = [
-        LineElement(; color=COLORS.counselors[c], linestyle=nothing) for
+        LineElement(; color=COLORS.counselors_utilities[c], linestyle=nothing) for
         c in [:A, :B, :mean]
     ]
     _labels = LABELS[lang].counselors
