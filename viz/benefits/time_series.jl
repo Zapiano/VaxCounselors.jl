@@ -20,6 +20,8 @@ function time_series(
     strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS[lang].strategies
 
     y_low, y_high = get_y_limits(_benefits)
+    n_timesteps = size(benefits, 1)
+    xticks = (range(1, n_timesteps; length=5), ["0", "25", "50", "75", "100"])
 
     n_figures = length(strategies_keys)
     n_cols, n_rows = get_cols_rows(n_figures)
@@ -48,6 +50,7 @@ function time_series(
                 bottomspinevisible=false,
                 title=subtitle,
                 xlabel=AXIS[lang].timesteps,
+                xticks=xticks,
                 ylabel=AXIS[lang].benefit,
                 limits=(nothing, (y_low, y_high)),
             )
