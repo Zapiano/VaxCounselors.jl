@@ -195,10 +195,13 @@ function _render_summary_legend!(f, strategies, lang)::Nothing
         f[end + 1, 1:end],
         line_elements,
         _labels;
-        orientation=:horizontal,
+        markersize=ELEMENTS.legend_marker_size,
+        labelsize=FONTS.legend_label_size,
+        labelfont=FONTS.family,
         framevisible=false,
         halign=:right,
-        padding=(0, 30, 0, 0),
+        padding=(0, 0, 0, 0),
+        orientation=:horizontal,
     )
     return nothing
 end
