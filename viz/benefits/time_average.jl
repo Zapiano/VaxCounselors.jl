@@ -174,11 +174,19 @@ function _render_average_benefits_legend!(
     f::Figure, colors, countries::Vector{Symbol}, lang::Symbol
 )::Nothing
     marker_elements = [
-        MarkerElement(; color=colors[i], marker=:circle, markersize=10) for
-        i in eachindex(countries)
+        MarkerElement(; color=colors[i], marker=:circle) for i in eachindex(countries)
     ]
 
     _labels = [LABELS[lang].countries[c] for c in countries]
-    Legend(f[1, 2], marker_elements, _labels; framevisible=false, rowgap=5)
+    Legend(
+        f[1, 2],
+        marker_elements,
+        _labels;
+        markersize=ELEMENTS.legend_marker_size,
+        labelsize=FONTS.legend_label_size,
+        labelfont=FONTS.family,
+        framevisible=false,
+        rowgap=5,
+    )
     return nothing
 end
