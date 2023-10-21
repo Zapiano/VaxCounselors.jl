@@ -58,9 +58,17 @@ function time_series(
                 topspinevisible=false,
                 bottomspinevisible=false,
                 title=subtitle,
+                titlesize=FONTS.title_size,
+                titlefont=FONTS.family,
                 xlabel=AXIS[lang].timesteps,
+                xlabelsize=FONTS.axes_label_size,
+                xlabelfont=FONTS.family,
                 xticks=xticks,
+                xticklabelfont=FONTS.family,
+                ylabelfont=FONTS.family,
                 ylabel=AXIS[lang].benefit,
+                ylabelsize=FONTS.axes_label_size,
+                yticklabelfont=FONTS.family,
                 limits=(nothing, (y_low, y_high)),
             )
 
@@ -90,6 +98,8 @@ function _render_benefits_legend!(f, lang)::Nothing
         f[1:end, 3],
         line_elements,
         [_labels.A, _labels.B, _labels.mean];
+        labelsize=FONTS.legend_label_size,
+        labelfont=FONTS.family,
         framevisible=false,
         rowgap=5,
     )
