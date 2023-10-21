@@ -130,6 +130,8 @@ const STRATEGY_KEYS = (
     ],
 )
 
-FONTS = (axes_label_size=18, legend_label_size=18, title_size=24, family="serif")
+const FONTS = (axes_label_size=18, legend_label_size=18, title_size=24, family="serif")
 
-ELEMENTS = (legend_line_width=3, legend_marker_size=15, line_width=2.5, marker_size=10)
+const ELEMENTS = (
+    legend_line_width=3, legend_marker_size=15, line_width=2.5, marker_size=10
+)
