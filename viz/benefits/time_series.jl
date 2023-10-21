@@ -77,9 +77,27 @@ function time_series(
             benefits_B = collect(_benefits[:, Key(:B), Key(strategy)])
             benefits_mean = (benefits_A + benefits_B) / 2
 
-            lines!(ax, timesteps, benefits_A; color=COLORS.counselors.A)
-            lines!(ax, timesteps, benefits_B; color=COLORS.counselors.B)
-            lines!(ax, timesteps, benefits_mean; color=COLORS.counselors.mean)
+            lines!(
+                ax,
+                timesteps,
+                benefits_A;
+                color=COLORS.counselors.A,
+                linewidth=ELEMENTS.line_width,
+            )
+            lines!(
+                ax,
+                timesteps,
+                benefits_B;
+                color=COLORS.counselors.B,
+                linewidth=ELEMENTS.line_width,
+            )
+            lines!(
+                ax,
+                timesteps,
+                benefits_mean;
+                color=COLORS.counselors.mean,
+                linewidth=ELEMENTS.line_width,
+            )
         end
     end
 
@@ -98,6 +116,7 @@ function _render_benefits_legend!(f, lang)::Nothing
         f[1:end, 3],
         line_elements,
         [_labels.A, _labels.B, _labels.mean];
+        linewidth=ELEMENTS.legend_line_width,
         labelsize=FONTS.legend_label_size,
         labelfont=FONTS.family,
         framevisible=false,
