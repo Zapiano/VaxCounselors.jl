@@ -29,6 +29,9 @@ function summary(benefits::NamedDimsArray; lang=:en, fig_opts::Dict=Dict())::Fig
         cabd = cum_ab_diff[:, Key(setup), :]
         cmb = cum_mean_benefit[:, Key(setup), :]
 
+        col_label_nc = idx_s == 1 ? "(a)" : ""
+        col_label_c = idx_s == 1 ? "(b)" : ""
+
         axis_opts_c = Dict(
             :ylabel => AXIS[lang].abcumdiff,
             :ylow => y_low_c,
@@ -36,15 +39,17 @@ function summary(benefits::NamedDimsArray; lang=:en, fig_opts::Dict=Dict())::Fig
             :xlabel => AXIS[lang].cum_mean_benefit,
             :xlow => x_low,
             :xhigh => x_high,
+            :col_label => col_label_c,
         )
         axis_opts_nc = Dict(
             :ylabel => AXIS[lang].abdiff,
             :ylow => y_low_nc,
             :yhigh => y_high_nc,
-            :label => LABELS[lang].setups[setup],
             :xlabel => AXIS[lang].cum_mean_benefit,
             :xlow => x_low,
             :xhigh => x_high,
+            :row_label => LABELS[lang].setups[setup],
+            :col_label => col_label_nc,
         )
 
         VaxCounselors.Viz.jointplot(g_c, cmb, cabd; axis_opts=axis_opts_c)
@@ -94,6 +99,12 @@ function jointplot(
         g[2, 1];
         xlabel=xlabel,
         ylabel=ylabel,
+        xlabelfont=FONTS.family,
+        xlabelsize=FONTS.axes_label_size,
+        xticklabelfont=FONTS.family,
+        ylabelfont=FONTS.family,
+        ylabelsize=FONTS.axes_label_size,
+        yticklabelfont=FONTS.family,
         limits=(xlow, xhigh, ylow, yhigh),
         backgroundcolor=bg_color,
         xgridcolor=grid_color,
@@ -134,7 +145,6 @@ function jointplot(
             x_data,
             y_data;
             markersize=5,
-            label=strategy,
             color=color,
             strokewidth=0.5,
             strokecolor=:white,
@@ -167,17 +177,29 @@ function jointplot(
     colgap!(g, 10)
     rowgap!(g, 10)
 
-    label = get(axis_opts, :label, "")
+    col_label = get(axis_opts, :col_label, "")
+    row_label = get(axis_opts, :row_label, "")
 
-    if !isempty(label)
+    if !isempty(row_label)
         Label(
             g[2, 1:2, Left()],
-            label;
+            row_label;
             valign=:center,
             rotation=π / 2,
-            font=:bold,
+            font=FONTS.family,
             padding=(0, 85, 0, 0),
-            fontsize=20,
+            fontsize=FONTS.title_size,
+        )
+    end
+
+    if !isempty(col_label)
+        Label(
+            g[1, 1, Top()],
+            col_label;
+            halign=:center,
+            padding=(0, 0, 15, 0),
+            fontsize=FONTS.title_size,
+            font=FONTS.family,
         )
     end
 
