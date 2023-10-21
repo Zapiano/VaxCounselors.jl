@@ -104,8 +104,10 @@ function avg_cum_mean_benefit(
     label_letters::Bool=false,
     lang::Symbol=:en,
     axis_opts::Dict=Dict(),
+    fig_opts::Dict=Dict(),
 )
-    f = Figure()
+    resolution = get(fig_opts, :resolution, (800, 450))
+    f = Figure(; resolution=resolution)
 
     strategies_keys = reverse(STRATEGY_KEYS.time_average)
     strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS[lang].strategies
