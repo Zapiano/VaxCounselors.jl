@@ -7,8 +7,11 @@ function time_series(
     lang::Symbol=:en,
     cumulative::Bool=false,
     axis_opts::Dict=Dict(),
+    fig_opts::Dict=Dict(),
 )
-    f = Figure()
+    height = isempty(strategies) ? 700 : ceil(length(strategies) / 2) * 250
+    resolution = get(fig_opts, :resolution, (800, height))
+    f = Figure(; resolution=resolution)
 
     # 3-dimensional NamedDimsArray
     _benefits = if cumulative
