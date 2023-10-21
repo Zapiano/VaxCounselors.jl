@@ -130,3 +130,5 @@ const STRATEGY_KEYS = (
 )
 
 FONTS = (axes_label_size=18, legend_label_size=18, title_size=24)
+
+ELEMENTS = (legend_line_width=3, line_width=2.5)

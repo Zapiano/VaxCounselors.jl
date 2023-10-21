@@ -57,9 +57,27 @@ function utility_densities(
             benefits_B = collect(_utilities[:, Key(:B), Key(setup)])
             benefits_mean = collect(_utilities[:, Key(:mean), Key(setup)])
 
-            lines!(ax, timesteps, benefits_A; color=COLORS.counselors.A)
-            lines!(ax, timesteps, benefits_B; color=COLORS.counselors.B)
-            lines!(ax, timesteps, benefits_mean; color=COLORS.counselors.mean)
+            lines!(
+                ax,
+                timesteps,
+                benefits_A;
+                color=COLORS.counselors.A,
+                linewidth=ELEMENTS.line_width,
+            )
+            lines!(
+                ax,
+                timesteps,
+                benefits_B;
+                color=COLORS.counselors.B,
+                linewidth=ELEMENTS.line_width,
+            )
+            lines!(
+                ax,
+                timesteps,
+                benefits_mean;
+                color=COLORS.counselors.mean,
+                linewidth=ELEMENTS.line_width,
+            )
         end
     end
 
@@ -78,6 +96,7 @@ function _render_utilities_legend!(f, lang)::Nothing
         f[1:end, 3],
         line_elements,
         [_labels.A, _labels.B, _labels.mean];
+        linewidth=ELEMENTS.legend_line_width,
         labelsize=FONTS.legend_label_size,
         framevisible=false,
         rowgap=5,
