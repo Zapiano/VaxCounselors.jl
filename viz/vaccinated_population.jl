@@ -4,8 +4,10 @@ function vaccinated_population(
     label_letters=false,
     lang=:en,
     axis_opts::Dict=Dict(),
+    fig_opts::Dict=Dict(),
 )
-    f = Figure()
+    resolution = get(fig_opts, :resolution, (800, 600))
+    f = Figure(; resolution=resolution)
 
     # 3-dimensional NamedDimsArray
     vax_pop = vaccinated_population[:, :, :, Key(country)]
