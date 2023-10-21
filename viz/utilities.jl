@@ -61,21 +61,21 @@ function utility_densities(
                 ax,
                 timesteps,
                 benefits_A;
-                color=COLORS.counselors.A,
+                color=COLORS.counselors_utilities.B,
                 linewidth=ELEMENTS.line_width,
             )
             lines!(
                 ax,
                 timesteps,
                 benefits_B;
-                color=COLORS.counselors.B,
+                color=COLORS.counselors_utilities.B,
                 linewidth=ELEMENTS.line_width,
             )
             lines!(
                 ax,
                 timesteps,
                 benefits_mean;
-                color=COLORS.counselors.mean,
+                color=COLORS.counselors_utilities.mean,
                 linewidth=ELEMENTS.line_width,
             )
         end

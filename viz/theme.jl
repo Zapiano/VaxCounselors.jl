@@ -87,7 +87,8 @@ const LABELS_LETTERS = (
 )
 
 const COLORS = (
-    counselors=(A="#FF4E00", B="#00B1FF", mean="#3a3a3a"),
+    counselors=(A="#FF4E00", B="#00B1FF", mean=:gray10),
+    counselors_utilities=(A=:purple1, B=:green3, mean=:gray10),
     strategies=(
         envy_free=:red,
         maximize_benefit=:blue,
