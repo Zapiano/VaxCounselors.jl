@@ -2,6 +2,7 @@ function time_series(
     benefits::NamedDimsArray;
     country::Symbol=:usa,
     setup::Symbol=:default,
+    strategies::Vector{Symbol}=Symbol[],
     label_letters::Bool=true,
     lang::Symbol=:en,
     cumulative::Bool=false,
@@ -15,7 +16,12 @@ function time_series(
     else
         benefits[:, :, :, Key(setup), Key(country)]
     end
-    strategies_keys = sort(Symbol.(get_axiskeys(_benefits, :strategies)))
+
+    strategies_keys = if !isempty(strategies)
+        strategies
+    else
+        sort(Symbol.(get_axiskeys(_benefits, :strategies)))
+    end
     sort!(strategies_keys; by=x -> LABELS_LETTERS[:strategies][x])
     strategies_labels = label_letters ? LABELS_LETTERS.strategies : LABELS[lang].strategies
 
