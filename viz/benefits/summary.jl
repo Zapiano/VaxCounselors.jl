@@ -144,7 +144,7 @@ function jointplot(
             ax_main,
             x_data,
             y_data;
-            markersize=5,
+            markersize=ELEMENTS.marker_size,
             color=color,
             strokewidth=0.5,
             strokecolor=:white,
