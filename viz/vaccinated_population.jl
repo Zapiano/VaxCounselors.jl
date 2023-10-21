@@ -45,8 +45,14 @@ function vaccinated_population(
                 topspinevisible=false,
                 bottomspinevisible=false,
                 title=subtitle,
+                titlesize=FONTS.title_size,
+                titlefont=FONTS.family,
                 xlabel=AXIS[lang].timesteps,
+                xlabelsize=FONTS.axes_label_size,
+                xlabelfont=FONTS.family,
                 ylabel=AXIS[lang].population_frac,
+                ylabelsize=FONTS.axes_label_size,
+                ylabelfont=FONTS.family,
                 yticks=(
                     range(y_low, y_high; length=5), ["0%", "25%", "50%", "75%", "100%"]
                 ),
