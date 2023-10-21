@@ -73,6 +73,12 @@ function avg_benefit_ab_diff(
         leftspinevisible=false,
         topspinevisible=false,
         bottomspinevisible=false,
+        xlabelfont=FONTS.family,
+        xlabelsize=FONTS.axes_label_size,
+        xticklabelfont=FONTS.family,
+        ylabelfont=FONTS.family,
+        ylabelsize=FONTS.axes_label_size,
+        yticklabelfont=FONTS.family,
     )
 
     xlabel = cumulative ? AXIS[lang].abcumdiff : AXIS[lang].abdiff
@@ -146,6 +152,12 @@ function avg_cum_mean_benefit(
         leftspinevisible=false,
         topspinevisible=false,
         bottomspinevisible=false,
+        xlabelfont=FONTS.family,
+        xlabelsize=FONTS.axes_label_size,
+        xticklabelfont=FONTS.family,
+        ylabelfont=FONTS.family,
+        ylabelsize=FONTS.axes_label_size,
+        yticklabelfont=FONTS.family,
     )
 
     xlabel = AXIS[lang].cum_mean_benefit
