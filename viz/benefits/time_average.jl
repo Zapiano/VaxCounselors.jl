@@ -46,12 +46,11 @@ function avg_benefit_ab_diff(
     category_colors = Array{RGB}(undef, data_size)
     n_countries = length(countries)
 
-    color_palette = ColorSchemes.tab20.colors[1:n_countries]
+    color_palette = cgrad(:nipy_spectral, n_countries; categorical=true)
 
     for (idx_s, strategy) in enumerate(strategies_keys)
         for (idx_c, country) in enumerate(countries)
             index = idx_c + length(countries) * (idx_s - 1)
-            #Main.@infiltrate
             category_data[index] = avg_benefit_ab_diff[
                 Key(strategy), Key(setup), Key(country)
             ]
@@ -119,7 +118,7 @@ function avg_cum_mean_benefit(
     category_colors = Array{RGB}(undef, data_size)
     n_countries = length(countries)
 
-    color_palette = ColorSchemes.tab20.colors[1:n_countries]
+    color_palette = cgrad(:nipy_spectral, n_countries; categorical=true)
 
     for (idx_s, strategy) in enumerate(strategies_keys)
         for (idx_c, country) in enumerate(countries)
