@@ -43,8 +43,12 @@ function utility_densities(
                 bottomspinevisible=false,
                 xticks=xticks,
                 title=subtitle,
+                titlesize=FONTS.title_size,
+                titlefont=:regular,
                 xlabel=AXIS[lang].population,
+                xlabelsize=FONTS.axes_label_size,
                 ylabel=AXIS[lang].utility,
+                ylabelsize=FONTS.axes_label_size,
                 limits=(nothing, (y_low, y_high)),
             )
 
@@ -74,6 +78,7 @@ function _render_utilities_legend!(f, lang)::Nothing
         f[1:end, 3],
         line_elements,
         [_labels.A, _labels.B, _labels.mean];
+        labelsize=FONTS.legend_label_size,
         framevisible=false,
         rowgap=5,
     )

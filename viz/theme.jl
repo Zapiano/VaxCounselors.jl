@@ -128,3 +128,5 @@ const STRATEGY_KEYS = (
         :random_vaccination, :maximize_benefit, :minimize_benefit, :oldest_first, :envy_free
     ],
 )
+
+FONTS = (axes_label_size=18, legend_label_size=18, title_size=24)
