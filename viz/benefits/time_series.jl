@@ -9,7 +9,7 @@ function time_series(
     axis_opts::Dict=Dict(),
     fig_opts::Dict=Dict(),
 )
-    height = isempty(strategies) ? 700 : ceil(length(strategies) / 2) * 250
+    height = isempty(strategies) ? 850 : ceil(length(strategies) / 2) * 300
     resolution = get(fig_opts, :resolution, (800, height))
     f = Figure(; resolution=resolution)
 
@@ -113,14 +113,14 @@ function _render_benefits_legend!(f, lang)::Nothing
     ]
     _labels = LABELS[lang].counselors
     Legend(
-        f[1:end, 3],
+        f[end + 1, 1:end],
         line_elements,
         [_labels.A, _labels.B, _labels.mean];
         linewidth=ELEMENTS.legend_line_width,
         labelsize=FONTS.legend_label_size,
         labelfont=FONTS.family,
         framevisible=false,
-        rowgap=5,
+        orientation=:horizontal,
     )
     return nothing
 end
