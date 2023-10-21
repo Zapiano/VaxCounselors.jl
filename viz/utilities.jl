@@ -4,8 +4,10 @@ function utility_densities(
     label_letters=false,
     lang=:en,
     axis_opts::Dict=Dict(),
+    fig_opts::Dict=Dict(),
 )
-    f = Figure()
+    resolution = get(fig_opts, :resolution, (800, 500))
+    f = Figure(; resolution=resolution)
 
     # 3-dimensional NamedDimsArray
     _utilities = utilities[:, :, :, Key(country)]
