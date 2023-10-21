@@ -62,7 +62,7 @@ function vaccinated_population(
                 limits=(nothing, (y_low, y_high)),
             )
             colors = collect(values(COLORS.age_groups))
-            series!(vax_pop[:, :, Key(setup)]'; color=colors)
+            series!(vax_pop[:, :, Key(setup)]'; color=colors, linewidth=ELEMENTS.line_width)
         end
     end
 
