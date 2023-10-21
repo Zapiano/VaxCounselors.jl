@@ -75,6 +75,16 @@ function _render_vax_pop_legend!(f, lang)::Nothing
     line_elements = [LineElement(; color=c) for c in values(COLORS.age_groups)]
     _labels = collect(values(LABELS[lang].age_groups))
     #Main.@infiltrate
-    Legend(f[1:end, 3], line_elements, _labels; framevisible=false, rowgap=5)
+    Legend(
+        f[end + 1, 1:end],
+        line_elements,
+        _labels;
+        linewidth=ELEMENTS.legend_line_width,
+        labelsize=FONTS.legend_label_size,
+        labelfont=FONTS.family,
+        framevisible=false,
+        rowgap=5,
+        orientation=:horizontal,
+    )
     return nothing
 end
