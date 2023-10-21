@@ -46,11 +46,13 @@ function utility_densities(
                 xticks=xticks,
                 title=subtitle,
                 titlesize=FONTS.title_size,
-                titlefont=:regular,
+                titlefont=FONTS.family,
                 xlabel=AXIS[lang].population,
                 xlabelsize=FONTS.axes_label_size,
+                xlabelfont=FONTS.family,
                 ylabel=AXIS[lang].utility,
                 ylabelsize=FONTS.axes_label_size,
+                ylabelfont=FONTS.family,
                 limits=(nothing, (y_low, y_high)),
             )
 
@@ -100,6 +102,7 @@ function _render_utilities_legend!(f, lang)::Nothing
         [_labels.A, _labels.B, _labels.mean];
         linewidth=ELEMENTS.legend_line_width,
         labelsize=FONTS.legend_label_size,
+        labelfont=FONTS.family,
         framevisible=false,
         rowgap=5,
     )
