@@ -4,7 +4,6 @@ using AxisKeys
 using CairoMakie
 using Colors
 using ColorSchemes
-using LaTeXStrings
 using NamedDims
 
 include("./theme.jl")

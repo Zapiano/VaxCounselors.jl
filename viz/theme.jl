@@ -13,7 +13,7 @@ const LABELS = (
             symptomatology="Symptomatology",
             concentrated="Concentrated",
         ),
-        counselors=(A=L"C_A", B=L"C_B", mean="Mean"),
+        counselors=(A=rich("C", subscript("A")), B=rich("C", subscript("B")), mean="Mean"),
         countries=(
             usa="United States",
             chn="China",
@@ -49,7 +49,7 @@ const LABELS = (
             symptomatology="Simtomatologia",
             concentrated="Concentrado",
         ),
-        counselors=(A=L"C_A", B=L"C_B", mean="Média"),
+        counselors=(A=rich("C", subscript("A")), B=rich("C", subscript("B")), mean="Média"),
         countries=(
             usa="Estados Unidos",
             chn="China",
