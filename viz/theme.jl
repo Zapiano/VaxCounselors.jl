@@ -46,7 +46,7 @@ const LABELS = (
         setups=(
             default="Padrão",
             transmissibility="Transmissibilidade",
-            symptomatology="Simtomatologia",
+            symptomatology="Sintomatologia",
             concentrated="Concentrado",
         ),
         counselors=(A=rich("C", subscript("A")), B=rich("C", subscript("B")), mean="Média"),
