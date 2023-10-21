@@ -50,9 +50,11 @@ function utility_densities(
                 xlabel=AXIS[lang].population,
                 xlabelsize=FONTS.axes_label_size,
                 xlabelfont=FONTS.family,
+                xticklabelfont=FONTS.family,
                 ylabel=AXIS[lang].utility,
                 ylabelsize=FONTS.axes_label_size,
                 ylabelfont=FONTS.family,
+                yticklabelfont=FONTS.family,
                 limits=(nothing, (y_low, y_high)),
             )
 
