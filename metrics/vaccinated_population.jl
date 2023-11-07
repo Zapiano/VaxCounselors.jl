@@ -1,4 +1,6 @@
-function vaccinated_population(data_folder::String, countries=[:usa])::NamedDimsArray
+function vaccinated_population(
+    data_folder::String; countries::Vector{Symbol}=[:usa]
+)::NamedDimsArray
     countries = if isempty(countries)
         Symbol.(filter(x -> x[1] != '.', readdir(data_folder)))
     else
