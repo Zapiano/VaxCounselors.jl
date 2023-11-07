@@ -1,16 +1,16 @@
 const LABELS = (
     en=(
         strategies=(
-            envy_free="Envy-Free",
-            maximize_benefit="Maximize-Benefit",
-            minimize_benefit="Minimize-Benefit",
-            oldest_first="Oldest-First",
+            envy_free="Envy-free",
+            maximize_benefit="Maximize-benefit",
+            minimize_benefit="Minimize-benefit",
+            oldest_first="Oldest-first",
             random_vaccination="Random Vaccination",
         ),
         setups=(
             default="Default",
-            transmissibility="Transmissibility",
             symptomatology="Symptomatology",
+            transmissibility="Transmissibility",
             concentrated="Concentrated",
         ),
         counselors=(A=rich("C", subscript("A")), B=rich("C", subscript("B")), mean="Mean"),
@@ -37,17 +37,17 @@ const LABELS = (
     ),
     pt=(
         strategies=(
-            envy_free="Envy-Free",
-            maximize_benefit="Maximize-Benefit",
-            minimize_benefit="Minimize-Benefit",
-            oldest_first="Oldest-First",
+            envy_free="Envy-free",
+            maximize_benefit="Maximize-benefit",
+            minimize_benefit="Minimize-benefit",
+            oldest_first="Oldest-first",
             random_vaccination="Random Vaccination",
         ),
         setups=(
-            default="Padrão",
-            transmissibility="Transmissibilidade",
-            symptomatology="Sintomatologia",
-            concentrated="Concentrado",
+            default="(1) Padrão",
+            symptomatology="(2) Sintomatologia",
+            transmissibility="(3) Transmissibilidade",
+            concentrated="(4) Concentrado",
         ),
         counselors=(A=rich("C", subscript("A")), B=rich("C", subscript("B")), mean="Média"),
         countries=(
@@ -82,7 +82,7 @@ const LABELS_LETTERS = (
         minimize_benefit="(e)",
     ),
     setups=(
-        default="(a)", transmissibility="(b)", symptomatology="(c)", concentrated="(d)"
+        default="(1)", symptomatology="(2)", transmissibility="(3)", concentrated="(4)"
     ),
 )
 
@@ -130,7 +130,7 @@ const STRATEGY_KEYS = (
     ],
 )
 
-const FONTS = (axes_label_size=18, legend_label_size=18, title_size=24, family="serif")
+const FONTS = (axes_label_size=18, legend_label_size=18, title_size=22, family="serif")
 
 const ELEMENTS = (
     legend_line_width=3, legend_marker_size=15, line_width=2.5, marker_size=10
