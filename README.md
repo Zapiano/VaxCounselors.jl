@@ -1,6 +1,6 @@
 # VaxCounselors.jl
 
-[![code style blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
+[![code style blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8026443.svg)](https://doi.org/10.5281/zenodo.8026443)
 
 `VaxCounselors` is a envy-free based model for vaccines distribution.
 
